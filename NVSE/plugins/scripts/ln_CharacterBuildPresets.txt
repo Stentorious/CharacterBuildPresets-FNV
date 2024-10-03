@@ -1,0 +1,61 @@
+; Character Build Presets 1.0 - Stentorious
+
+; Load INI settings
+int iINI = 40
+if eval GetINIFloat "Tweaks:bCustomSpecialPoints" "..\nvse\plugins\nvse_stewie_tweaks.ini" == 1
+	iINI = GetINIFloat "SPECIAL Points:iNumPointsToAllocate" "..\nvse\plugins\nvse_stewie_tweaks.ini"
+elseif eval IsModLoaded "ROOG.esp" || IsModLoaded "ROOGNV.esp"
+	iINI = GetGlobalVariable (EditorIDToFormID "SpecialPoints")
+endif
+Goo1.AuxVarSetFlt "*CharPre_Flt" (iINI - 7) 0
+
+Goo1.AuxVarSetFlt "*CharPre_INI" (GetMaxOf 0 (GetMinOf (GetGS iTraitMenuMaxNumTraits) (GetINIFloat "Randomization:iMaxTraits" "Stentorious\CharacterBuildPresets.ini"))) 0
+Goo1.AuxVarSetFlt "*CharPre_INI" (GetMaxOf 0 (GetMinOf (Goo1.AuxVarGetFlt "*CharPre_INI" 0) (GetINIFloat "Randomization:iMinTraits" "Stentorious\CharacterBuildPresets.ini"))) 1
+
+; Show load preset message box in race menu
+SetOnMenuClickEventHandler ({int iMenuID, int iTileID, string_var sTileName} => Call (CompileScript "CharacterBuildPresets\LoadPrompt.gek")) 1 "RaceSexMenu\NOGLOW_BRANCH\RSM_Background\RSM_build_button"
+
+; Preselect SPECIAL\tag skills
+if GetINIFloat "General:bPreselectTagSkills" "Stentorious\CharacterBuildPresets.ini" == 1 || GetINIFloat "General:bPreselectSPECIAL" "Stentorious\CharacterBuildPresets.ini" == 1
+	SetOnMenuOpenEventHandler (CompileScript "CharacterBuildPresets\CharGenMenu.gek") 1 1048
+endif
+
+; Preselect traits
+if GetINIFloat "General:bPreselectTraits" "Stentorious\CharacterBuildPresets.ini" == 1
+	SetOnMenuOpenEventHandler (CompileScript "CharacterBuildPresets\TraitMenu.gek") 1 1084
+endif
+
+; Detect button press
+SetOnMenuClickEventHandler ({int iMenuID, int iTileID, string_var sTileName} => Call (CompileScript "CharacterBuildPresets\CharGenMenu.gek") 1) 1 "CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ButtonRect\CGM_PresetButton"
+SetOnMenuClickEventHandler ({int iMenuID, int iTileID, string_var sTileName} => Call (CompileScript "CharacterBuildPresets\TraitMenu.gek") 1) 1 "TraitMenu\NOGLOW_BRANCH\LUM_MainRect\LUM_ButtonRect\LUM_PresetButton"
+
+; Detect "Q" key press
+SetOnKeyDownEventHandler (begin function {int iKeyID}
+	if eval GetActiveMenuMode == 1048 && GetUIFloatAlt "CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ButtonRect\CGM_PresetButton\visible" == 1
+		Call (CompileScript "CharacterBuildPresets\CharGenMenu.gek") 1
+	elseif eval GetActiveMenuMode == 1084 && GetUIFloatAlt "TraitMenu\NOGLOW_BRANCH\LUM_MainRect\LUM_ButtonRect\LUM_PresetButton\visible" == 1
+		Call (CompileScript "CharacterBuildPresets\TraitMenu.gek") 1
+	endif
+end) 1 16
+
+; Detect gamepad "Right Stick" button press
+SetEventHandler "OnButtonDown:128" (begin function {int iKeyID}
+	if eval GetActiveMenuMode == 1048 && GetUIFloatAlt "CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ButtonRect\CGM_PresetButton\visible" == 1
+		Call (CompileScript "CharacterBuildPresets\CharGenMenu.gek") 1
+	elseif eval GetActiveMenuMode == 1084 && GetUIFloatAlt "TraitMenu\NOGLOW_BRANCH\LUM_MainRect\LUM_ButtonRect\LUM_PresetButton\visible" == 1
+		Call (CompileScript "CharacterBuildPresets\TraitMenu.gek") 1
+	endif
+end)
+
+; Detect gamepad "B" button press
+;SetEventHandler "OnButtonDown:8192" (begin function {int iKeyID}
+;	if eval GetActiveMenuMode == 1036 && GetUIFloatAlt "RaceSexMenu\NOGLOW_BRANCH\RSM_Background\RSM_back_button\visible" == 1
+;		Call (CompileScript "CharacterBuildPresets\LoadPrompt.gek")
+;	endif
+;end)
+
+; Show save preset message box on character creation completion
+SetJohnnyOnStopQuestEventHandler 1 ({ref rQuest} => MessageBoxExAlt (CompileScript "CharacterBuildPresets\SavePrompt.gek") "^Character Stat Presets^Would you like to save %z as a Character Stat Preset?|%z|%z" (Player.LNGetName) (GetStringSetting "sYes") (GetStringSetting "sNo")) 0 VCG04
+if eval IsModLoaded "TaleOfTwoWastelands.esm"
+	SetOnQuestStageEventHandler ({ref rQuest, int iStageIdx} => MessageBoxExAlt (CompileScript "CharacterBuildPresets\SavePrompt.gek") "^Character Stat Presets^Would you like to save %z as a Character Stat Preset?|%z|%z" (Player.LNGetName) (GetStringSetting "sYes") (GetStringSetting "sNo")) 1 (EditorIDToFormID "CG04") 150
+endif

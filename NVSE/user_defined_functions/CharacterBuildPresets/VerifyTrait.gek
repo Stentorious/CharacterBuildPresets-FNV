@@ -1,0 +1,29 @@
+int iButton
+int iCount
+int iAvailable
+
+begin Function {iButton}
+
+	; Verify traits
+	if iButton == 0
+
+		; Calculate preset trait count
+		while Goo1.AuxVarType "CharPre_Cache" (iCount + 11) == 4
+			iCount += 1
+		loop
+
+		; Available trait points
+		iAvailable = GetGS iTraitMenuMaxNumTraits
+
+		; Preset trait count > available trait points
+		if eval iCount > iAvailable
+			MessageBoxExAlt (CompileScript "CharacterBuildPresets\LoadINI.gek") "^Preset Warning^Exceeds trait points!%r%rPreset Traits: %g%rAvailable Traits: %g|%z|%z" iCount iAvailable (GetStringSetting "sContinue") (GetStringSetting "sCancel")
+		else
+			Call (CompileScript "CharacterBuildPresets\LoadINI.gek") 0
+		endif
+
+	else
+		Call (CompileScript "CharacterBuildPresets\LoadPrompt.gek")
+	endif
+
+end

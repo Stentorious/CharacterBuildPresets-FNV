@@ -1,0 +1,10 @@
+Stentorious\CharacterBuildPresets\RSM_build_button.xml::RaceSexMenu::RSM_Background
+true
+Stentorious\CharacterBuildPresets\CGM_PresetButton.xml::CharGenMenu::CGM_ButtonRect
+true
+Stentorious\CharacterBuildPresets\LUM_PresetButton.xml::TraitMenu::LUM_ButtonRect
+true
+Stentorious\CharacterBuildPresets\CGM_DoneButton.xml::CharGenMenu::CGM_DoneButton
+true
+Stentorious\CharacterBuildPresets\LUM_DoneButton.xml::TraitMenu::LUM_ContinueButton
+true

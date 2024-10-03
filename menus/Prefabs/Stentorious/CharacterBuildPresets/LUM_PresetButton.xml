@@ -1,0 +1,15 @@
+<hotrect name="LUM_PresetButton">
+	<include src="text_box.xml" />
+	<visible> 1 </visible>
+	<_y>
+		<copy src="sibling(LUM_ResetButton)" trait="_y" />
+		<add>
+			<copy src="sibling(LUM_ResetButton)" trait="height" />
+			<onlyif src="sibling(LUM_ResetButton)" trait="visible" />
+		</add>
+	</_y>
+	<justify> &right; </justify>
+	<string> Preset </string>
+	<_xbox_button> &xbuttonr; </_xbox_button>
+	<_PCButtonText> Q) </_PCButtonText>
+</hotrect>

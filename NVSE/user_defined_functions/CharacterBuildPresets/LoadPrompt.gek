@@ -1,0 +1,31 @@
+int iCount
+string_var sFilename
+string_var sMsgBox
+array_var aPresets
+array_var aForE
+
+begin Function {}
+
+	; Build message box string with available presets
+	aPresets = GetFilesInFolder "CharacterBuildPresets" "*.ini"
+	sMsgBox = "^Character Build Presets^"
+	if aPresets
+		Goo1.AuxVarSetFromArr "*CharPre_File" aPresets
+		foreach aForE <- aPresets
+			sFilename = *aForE
+			Sv_Replace ".ini|" sFilename
+			sMsgBox = sv_Construct "%z|%z" sMsgBox sFilename
+			iCount += 1
+		loop
+	endif
+
+	; Cache number of presets
+	Goo1.AuxVarSetFlt "*CharPre_Flt" iCount 1
+
+	; Show build presets message box
+	MessageBoxExAlt (CompileScript "CharacterBuildPresets\PresetPrompt.gek") "%z|%z|%z" sMsgBox (GetStringSetting "sRandom") (GetStringSetting "sCancel")
+
+	aPresets = aForE = ar_Null
+	sv_Destruct sMsgBox sFilename
+
+end

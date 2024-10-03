@@ -1,0 +1,15 @@
+<hotrect name="CGM_PresetButton">
+	<include src="text_box.xml" />
+	<visible> <not src="io()" trait="_OnlyAdd" /> </visible>
+	<_y>
+		<copy src="sibling(CGM_ResetButton)" trait="_y" />
+		<add>
+			<copy src="sibling(CGM_ResetButton)" trait="height" />
+			<onlyif src="sibling(CGM_ResetButton)" trait="visible" />
+		</add>
+	</_y>
+	<justify> &right; </justify>
+	<string> Preset </string>
+	<_xbox_button> &xbuttonr; </_xbox_button>
+	<_PCButtonText> Q) </_PCButtonText>
+</hotrect>
