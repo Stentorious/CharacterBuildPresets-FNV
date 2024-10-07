@@ -47,7 +47,7 @@ begin Function {iMenuID}
 
 				endif
 
-				sv_Destruct sTag0 sTag1 sTag2
+				Sv_Destruct sTag0 sTag1 sTag2
 
 			endif
 

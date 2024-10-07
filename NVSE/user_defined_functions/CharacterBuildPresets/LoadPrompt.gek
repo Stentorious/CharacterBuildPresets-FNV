@@ -14,7 +14,7 @@ begin Function {}
 		foreach aForE <- aPresets
 			sFilename = *aForE
 			Sv_Replace ".ini|" sFilename
-			sMsgBox = sv_Construct "%z|%z" sMsgBox sFilename
+			sMsgBox = Sv_Construct "%z|%z" sMsgBox sFilename
 			iCount += 1
 		loop
 	endif
@@ -25,7 +25,7 @@ begin Function {}
 	; Show build presets message box
 	MessageBoxExAlt (CompileScript "CharacterBuildPresets\PresetPrompt.gek") "%z|%z|%z" sMsgBox (GetStringSetting "sRandom") (GetStringSetting "sCancel")
 
-	aPresets = aForE = ar_Null
-	sv_Destruct sMsgBox sFilename
+	aPresets = aForE = Ar_Null
+	Sv_Destruct sMsgBox sFilename
 
 end

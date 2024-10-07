@@ -30,7 +30,7 @@ begin Function {iMenuID}
 				sUIPath = "TraitMenu\NOGLOW_BRANCH\LUM_MainRect\LUM_PerkList\LUM_Perk:" + $iTile
 			loop
 
-			sv_Destruct sUIPath sName
+			Sv_Destruct sUIPath sName
 
 		; Disable button if no preset loaded
 		else

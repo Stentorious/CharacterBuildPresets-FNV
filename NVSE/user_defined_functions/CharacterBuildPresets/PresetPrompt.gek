@@ -30,13 +30,13 @@ begin Function {iButton}
 
 		; Build message box string with character stats
 		sPreset = (Goo1.AuxVarGetStr "*CharPre_File" iButton)
-		sINI = sv_Construct "..\CharacterBuildPresets\%z" sPreset
+		sINI = Sv_Construct "..\CharacterBuildPresets\%z" sPreset
 		Sv_Replace ".ini|" sPreset
 
 		; Preset/character name
 		sName = GetINIString "Preset:Name" (sINI)
 		Goo1.AuxVarSetStr "CharPre_Cache" (sName) 0
-		sMsgBox = sv_Construct "^%z^%z: %z%r%r" sPreset (GetStringSetting "sName") (sName)
+		sMsgBox = Sv_Construct "^%z^%z: %z%r%r" sPreset (GetStringSetting "sName") (sName)
 
 		; SPECIAL
 		Goo1.AuxVarSetFlt "CharPre_Cache" (iStrength = GetINIFloat "Preset:Strength" (sINI)) 1
@@ -46,20 +46,20 @@ begin Function {iButton}
 		Goo1.AuxVarSetFlt "CharPre_Cache" (iIntelligence = GetINIFloat "Preset:Intelligence" (sINI)) 5
 		Goo1.AuxVarSetFlt "CharPre_Cache" (iAgility = GetINIFloat "Preset:Agility" (sINI)) 6
 		Goo1.AuxVarSetFlt "CharPre_Cache" (iLuck = GetINIFloat "Preset:Luck" (sINI)) 7
-		sMsgBox = sv_Construct "%z%z%r%z: %g%r%z: %g%r%z: %g%r%z: %g%r%z: %g%r%z: %g%r%z: %g%r%r" sMsgBox (GetStringSetting "sStatsSpecial") (AVStringC 5 1) iStrength (AVStringC 6 1) iPerception (AVStringC 7 1) iEndurance (AVStringC 8 1) iCharisma (AVStringC 9 1) iIntelligence (AVStringC 10 1) iAgility (AVStringC 11 1) iLuck
+		sMsgBox = Sv_Construct "%z%z%r%z: %g%r%z: %g%r%z: %g%r%z: %g%r%z: %g%r%z: %g%r%z: %g%r%r" sMsgBox (GetStringSetting "sStatsSpecial") (AVStringC 5 1) iStrength (AVStringC 6 1) iPerception (AVStringC 7 1) iEndurance (AVStringC 8 1) iCharisma (AVStringC 9 1) iIntelligence (AVStringC 10 1) iAgility (AVStringC 11 1) iLuck
 
 		; Tag skills
 		aStat = Sv_Split (GetINIString "Preset:TagSkills" (sINI)) "|"
 		Goo1.AuxVarSetStr "CharPre_Cache" (aStat[0]) 8
 		Goo1.AuxVarSetStr "CharPre_Cache" (aStat[1]) 9
 		Goo1.AuxVarSetStr "CharPre_Cache" (aStat[2]) 10
-		sMsgBox = sv_Construct "%zTag Skills:%r> %z%r> %z%r> %z%r%r" sMsgBox (aStat[0]) (aStat[1]) (aStat[2])
+		sMsgBox = Sv_Construct "%zTag Skills:%r> %z%r> %z%r> %z%r%r" sMsgBox (aStat[0]) (aStat[1]) (aStat[2])
 
 		; Traits
 		while Goo1.AuxVarType "CharPre_Cache" 11 == 4
 			Goo1.AuxVarErase "CharPre_Cache" 11
 		loop
-		sMsgBox = sv_Construct "%zTraits:" sMsgBox
+		sMsgBox = Sv_Construct "%zTraits:" sMsgBox
 		if eval (GetINIString "Preset:Traits" (sINI) != "0")
 			aStat = Sv_Split (GetINIString "Preset:Traits" (sINI)) "|"
 			if aStat
@@ -69,17 +69,17 @@ begin Function {iButton}
 					if eval IsFormValid rPerk
 						Goo1.AuxVarSetStr "CharPre_Cache" (*aForE) iLoop
 						if iLoop < 15
-							sMsgBox = sv_Construct "%z%r> %n" sMsgBox rPerk
+							sMsgBox = Sv_Construct "%z%r> %n" sMsgBox rPerk
 						endif
 					endif
 					if iLoop == 15
-						sMsgBox = sv_Construct "%z%r> %g more traits..." sMsgBox ((Ar_Size aStat) - (iLoop - 11))
+						sMsgBox = Sv_Construct "%z%r> %g more traits..." sMsgBox ((Ar_Size aStat) - (iLoop - 11))
 					endif
 					iLoop += 1
 				loop
 			endif
 		else
-			sMsgBox = sv_Construct "%z%r> %z" sMsgBox (GetStringSetting "sNone")
+			sMsgBox = Sv_Construct "%z%r> %z" sMsgBox (GetStringSetting "sNone")
 		endif
 
 		; Show preset message box
@@ -90,9 +90,9 @@ begin Function {iButton}
 
 		; Preset/character name
 		aStat = Ar_List "Evil", "Good", "Neutral"
-		sName = GetStringSetting (sv_Construct "SKarmicTitle%z%02.0f" (aStat[(GetRandomInRange 0 3)]) (GetRandomInRange 1 31))
+		sName = GetStringSetting (Sv_Construct "SKarmicTitle%z%02.0f" (aStat[(GetRandomInRange 0 3)]) (GetRandomInRange 1 31))
 		Goo1.AuxVarSetStr "CharPre_Cache" (sName) 0
-		sMsgBox = sv_Construct "^%z^%z: %z%r%r" (GetStringSetting "sRandom") (GetStringSetting "sName") (sName)
+		sMsgBox = Sv_Construct "^%z^%z: %z%r%r" (GetStringSetting "sRandom") (GetStringSetting "sName") (sName)
 
 		; SPECIAL
 		aStat = Ar_Map 5::1, 6::1, 7::1, 8::1, 9::1, 10::1, 11::1
@@ -111,7 +111,7 @@ begin Function {iButton}
 		Goo1.AuxVarSetFlt "CharPre_Cache" (iIntelligence = aStat[9]) 5
 		Goo1.AuxVarSetFlt "CharPre_Cache" (iAgility = aStat[10]) 6
 		Goo1.AuxVarSetFlt "CharPre_Cache" (iLuck = aStat[11]) 7
-		sMsgBox = sv_Construct "%z%z%r%z: %g%r%z: %g%r%z: %g%r%z: %g%r%z: %g%r%z: %g%r%z: %g%r%r" sMsgBox (GetStringSetting "sStatsSpecial") (AVStringC 5 1) iStrength (AVStringC 6 1) iPerception (AVStringC 7 1) iEndurance (AVStringC 8 1) iCharisma (AVStringC 9 1) iIntelligence (AVStringC 10 1) iAgility (AVStringC 11 1) iLuck
+		sMsgBox = Sv_Construct "%z%z%r%z: %g%r%z: %g%r%z: %g%r%z: %g%r%z: %g%r%z: %g%r%z: %g%r%r" sMsgBox (GetStringSetting "sStatsSpecial") (AVStringC 5 1) iStrength (AVStringC 6 1) iPerception (AVStringC 7 1) iEndurance (AVStringC 8 1) iCharisma (AVStringC 9 1) iIntelligence (AVStringC 10 1) iAgility (AVStringC 11 1) iLuck
 
 		; Tag skills
 		aStat = Ar_List 0, 0, 0
@@ -127,17 +127,17 @@ begin Function {iButton}
 		Goo1.AuxVarSetStr "CharPre_Cache" (AVStringC (aStat[0])) 8
 		Goo1.AuxVarSetStr "CharPre_Cache" (AVStringC (aStat[1])) 9
 		Goo1.AuxVarSetStr "CharPre_Cache" (AVStringC (aStat[2])) 10
-		sMsgBox = sv_Construct "%zTag Skills:%r> %z%r> %z%r> %z%r%r" sMsgBox (AVStringC (aStat[0]) 1) (AVStringC (aStat[1]) 1) (AVStringC (aStat[2]) 1)
+		sMsgBox = Sv_Construct "%zTag Skills:%r> %z%r> %z%r> %z%r%r" sMsgBox (AVStringC (aStat[0]) 1) (AVStringC (aStat[1]) 1) (AVStringC (aStat[2]) 1)
 
 		; Traits
 		while Goo1.AuxVarType "CharPre_Cache" 11 == 4
 			Goo1.AuxVarErase "CharPre_Cache" 11
 		loop
-		sMsgBox = sv_Construct "%zTraits:" sMsgBox
+		sMsgBox = Sv_Construct "%zTraits:" sMsgBox
 		iSize = GetRandomInRange (Goo1.AuxVarGetFlt "*CharPre_INI" 1) ((Goo1.AuxVarGetFlt "*CharPre_INI" 0) + 1)
 		if iSize > 0
 			aStat = GetLoadedTypeArray 86
-			aStat = ar_Filter aStat ({array_var aIter} => GetPerkFlag (*aIter) 0)
+			aStat = Ar_Filter aStat ({array_var aIter} => GetPerkFlag (*aIter) 0)
 			aNames = Ar_Construct "array"
 			iLoop = 0
 			while iLoop < iSize
@@ -151,15 +151,15 @@ begin Function {iButton}
 			iLoop = 0
 			while iLoop < iSize
 				if iLoop < 4
-					sMsgBox = sv_Construct "%z%r> %z" sMsgBox (aNames[iLoop])
+					sMsgBox = Sv_Construct "%z%r> %z" sMsgBox (aNames[iLoop])
 					iLoop += 1
 				else
-					sMsgBox = sv_Construct "%z%r> %g more traits..." sMsgBox (iSize - iLoop)
+					sMsgBox = Sv_Construct "%z%r> %g more traits..." sMsgBox (iSize - iLoop)
 					break
 				endif
 			loop
 		else
-			sMsgBox = sv_Construct "%z%r> %z" sMsgBox (GetStringSetting "sNone")
+			sMsgBox = Sv_Construct "%z%r> %z" sMsgBox (GetStringSetting "sNone")
 		endif
 
 		; Show preset message box
@@ -168,7 +168,7 @@ begin Function {iButton}
 
 	endif
 
-	sv_Destruct sINI sMsgBox sPreset sName
-	aStat = aNames = aForE = ar_Null
+	Sv_Destruct sINI sMsgBox sPreset sName
+	aStat = aNames = aForE = Ar_Null
 
 end

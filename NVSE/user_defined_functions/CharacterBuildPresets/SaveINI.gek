@@ -8,7 +8,7 @@ array_var aForE
 
 begin Function {sFilename}
 
-	sFilename = sv_Construct "..\CharacterBuildPresets\%z.ini" sFilename
+	sFilename = Sv_Construct "..\CharacterBuildPresets\%z.ini" sFilename
 
 	; Character name
 	SetINIString "Preset:Name" (Player.LNGetName) (sFilename)
@@ -25,46 +25,46 @@ begin Function {sFilename}
 	; Tag skills
 	sINI = ""
 	if eval IsPlayerTagSkill Barter
-		sINI = sv_Construct "%z|Barter" sINI
+		sINI = Sv_Construct "%z|Barter" sINI
 	endif
 	if eval IsPlayerTagSkill BigGuns
-		sINI = sv_Construct "%z|BigGuns" sINI
+		sINI = Sv_Construct "%z|BigGuns" sINI
 	endif
 	if eval IsPlayerTagSkill EnergyWeapons
-		sINI = sv_Construct "%z|EnergyWeapons" sINI
+		sINI = Sv_Construct "%z|EnergyWeapons" sINI
 	endif
 	if eval IsPlayerTagSkill Explosives
-		sINI = sv_Construct "%z|Explosives" sINI
+		sINI = Sv_Construct "%z|Explosives" sINI
 	endif
 	if eval IsPlayerTagSkill Lockpick
-		sINI = sv_Construct "%z|Lockpick" sINI
+		sINI = Sv_Construct "%z|Lockpick" sINI
 	endif
 	if eval IsPlayerTagSkill Medicine
-		sINI = sv_Construct "%z|Medicine" sINI
+		sINI = Sv_Construct "%z|Medicine" sINI
 	endif
 	if eval IsPlayerTagSkill MeleeWeapons
-		sINI = sv_Construct "%z|MeleeWeapons" sINI
+		sINI = Sv_Construct "%z|MeleeWeapons" sINI
 	endif
 	if eval IsPlayerTagSkill Repair
-		sINI = sv_Construct "%z|Repair" sINI
+		sINI = Sv_Construct "%z|Repair" sINI
 	endif
 	if eval IsPlayerTagSkill Science
-		sINI = sv_Construct "%z|Science" sINI
+		sINI = Sv_Construct "%z|Science" sINI
 	endif
 	if eval IsPlayerTagSkill Guns
-		sINI = sv_Construct "%z|Guns" sINI
+		sINI = Sv_Construct "%z|Guns" sINI
 	endif
 	if eval IsPlayerTagSkill Sneak
-		sINI = sv_Construct "%z|Sneak" sINI
+		sINI = Sv_Construct "%z|Sneak" sINI
 	endif
 	if eval IsPlayerTagSkill Speech
-		sINI = sv_Construct "%z|Speech" sINI
+		sINI = Sv_Construct "%z|Speech" sINI
 	endif
 	if eval IsPlayerTagSkill Survival
-		sINI = sv_Construct "%z|Survival" sINI
+		sINI = Sv_Construct "%z|Survival" sINI
 	endif
 	if eval IsPlayerTagSkill Unarmed
-		sINI = sv_Construct "%z|Unarmed" sINI
+		sINI = Sv_Construct "%z|Unarmed" sINI
 	endif
 	Sv_Erase sINI, 0, 1
 	SetINIString "Preset:TagSkills" (sINI) (sFilename)
@@ -76,7 +76,7 @@ begin Function {sFilename}
 		foreach aForE <- aPerks
 			rPerk = (*aForE)
 			if eval IsTrait rPerk
-				sINI = sv_Construct "%z|%z" sINI (GetEditorID rPerk)
+				sINI = Sv_Construct "%z|%z" sINI (GetEditorID rPerk)
 			endif
 		loop
 		Sv_Erase sINI, 0, 1
@@ -85,7 +85,7 @@ begin Function {sFilename}
 		SetINIFloat "Preset:Traits" 0 (sFilename)
 	endif
 
-	aPerks = aForE = ar_Null
-	sv_Destruct sFilename sINI
+	aPerks = aForE = Ar_Null
+	Sv_Destruct sFilename sINI
 
 end
