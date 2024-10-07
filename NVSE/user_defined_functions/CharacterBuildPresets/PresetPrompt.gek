@@ -71,6 +71,8 @@ begin Function {iButton}
 						if iLoop < 15
 							sMsgBox = Sv_Construct "%z%r> %n" sMsgBox rPerk
 						endif
+					else
+						PrintC "Ignoring Unknown Trait: %z" (*aForE)
 					endif
 					if iLoop == 15
 						sMsgBox = Sv_Construct "%z%r> %g more traits..." sMsgBox ((Ar_Size aStat) - (iLoop - 11))
