@@ -1,7 +1,13 @@
 int iCount
+int iLoop
+int iTemp
+int iVerify
 string_var sFilename
 string_var sMsgBox
 array_var aPresets
+array_var aINI
+array_var aVerify
+array_var aStat
 array_var aForE
 
 begin Function {}
@@ -9,13 +15,51 @@ begin Function {}
 	; Build message box string with available presets
 	aPresets = GetFilesInFolder "CharacterBuildPresets" "*.ini"
 	sMsgBox = "^Character Build Presets^"
+	Goo1.AuxVarErase "*CharPre_File"
 	if aPresets
-		Goo1.AuxVarSetFromArr "*CharPre_File" aPresets
+		aVerify = Ar_List "Agility", "Charisma", "Endurance", "Intelligence", "Luck", "Name", "Perception", "Strength", "TagSkills", "Traits"
 		foreach aForE <- aPresets
 			sFilename = *aForE
-			Sv_Replace ".ini|" sFilename
-			sMsgBox = Sv_Construct "%z|%z" sMsgBox sFilename
-			iCount += 1
+
+			; Verify INI formatting
+			iVerify = 1
+			aINI = GetINISection "Preset" ("..\CharacterBuildPresets\" + sFilename)
+
+			; Verify [Preset] section
+			if eval (Ar_Size aINI) == 0
+				iVerify = 0
+				PrintC "Malformed %z: Missing [Preset] section" sFilename
+			elseif eval (Ar_Keys aINI) != aVerify
+				iVerify = 0
+				PrintC "Malformed %z: Incomplete [Preset] section" sFilename
+			else
+
+				; Verify tag skills
+				aStat = Sv_Split (aINI["TagSkills"]) "|"
+				if eval (Ar_Size aStat) == 3
+					iLoop = 0
+					while iLoop < 3
+						iTemp = StringToActorValue (aStat[iLoop])
+						if eval iTemp < 32 || iTemp > 45
+							iVerify = 0
+							PrintC "Malformed %z: Unknown Skill %q%z%q" sFilename (aStat[iLoop])
+						endif
+						iLoop += 1
+					loop
+				else
+					iVerify = 0
+					PrintC "Malformed %z: Missing tagged skill(s)" sFilename
+				endif
+			endif
+
+			; Add preset option
+			if iVerify
+				Goo1.AuxVarSetStr "*CharPre_File" (sFilename) -1
+				Sv_Replace ".ini|" sFilename
+				sMsgBox = Sv_Construct "%z|%z" sMsgBox sFilename
+				iCount += 1
+			endif
+
 		loop
 	endif
 
@@ -25,7 +69,7 @@ begin Function {}
 	; Show build presets message box
 	MessageBoxExAlt (CompileScript "CharacterBuildPresets\PresetPrompt.gek") "%z|%z|%z" sMsgBox (GetStringSetting "sRandom") (GetStringSetting "sCancel")
 
-	aPresets = aForE = Ar_Null
+	aPresets = aVerify = aINI = aStat = aForE = Ar_Null
 	Sv_Destruct sMsgBox sFilename
 
 end
