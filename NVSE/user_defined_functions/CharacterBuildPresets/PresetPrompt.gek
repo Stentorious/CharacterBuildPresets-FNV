@@ -34,6 +34,7 @@ begin Function {iButton}
 		Sv_Replace ".ini|" sPreset
 
 		; Preset/character name
+		PrintC "Loading Build Preset: %z" sPreset
 		sName = GetINIString "Preset:Name" (sINI)
 		Goo1.AuxVarSetStr "CharPre_Cache" (sName) 0
 		sMsgBox = Sv_Construct "^%z^%z: %z%r%r" sPreset (GetStringSetting "sName") (sName)
@@ -49,17 +50,20 @@ begin Function {iButton}
 		sMsgBox = Sv_Construct "%z%z%r%z: %g%r%z: %g%r%z: %g%r%z: %g%r%z: %g%r%z: %g%r%z: %g%r%r" sMsgBox (GetStringSetting "sStatsSpecial") (AVStringC 5 1) iStrength (AVStringC 6 1) iPerception (AVStringC 7 1) iEndurance (AVStringC 8 1) iCharisma (AVStringC 9 1) iIntelligence (AVStringC 10 1) iAgility (AVStringC 11 1) iLuck
 
 		; Tag skills
+		sMsgBox = Sv_Construct "%zTag Skills:" sMsgBox
 		aStat = Sv_Split (GetINIString "Preset:TagSkills" (sINI)) "|"
-		Goo1.AuxVarSetStr "CharPre_Cache" (aStat[0]) 8
-		Goo1.AuxVarSetStr "CharPre_Cache" (aStat[1]) 9
-		Goo1.AuxVarSetStr "CharPre_Cache" (aStat[2]) 10
-		sMsgBox = Sv_Construct "%zTag Skills:%r> %z%r> %z%r> %z%r%r" sMsgBox (aStat[0]) (aStat[1]) (aStat[2])
+		iLoop = 0
+		while iLoop < 3
+			Goo1.AuxVarSetStr "CharPre_Cache" (aStat[iLoop]) (iLoop + 8)
+			sMsgBox = Sv_Construct "%z%r> %z" sMsgBox (AVStringC (StringToActorValue (aStat[iLoop])) 1)
+			iLoop += 1
+		loop
 
 		; Traits
 		while Goo1.AuxVarType "CharPre_Cache" 11 == 4
 			Goo1.AuxVarErase "CharPre_Cache" 11
 		loop
-		sMsgBox = Sv_Construct "%zTraits:" sMsgBox
+		sMsgBox = Sv_Construct "%z%r%rTraits:" sMsgBox
 		if eval (GetINIString "Preset:Traits" (sINI) != "0")
 			aStat = Sv_Split (GetINIString "Preset:Traits" (sINI)) "|"
 			if aStat
