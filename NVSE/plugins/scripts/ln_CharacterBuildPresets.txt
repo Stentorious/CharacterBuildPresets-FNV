@@ -1,6 +1,5 @@
 ; Character Build Presets 1.0 - Stentorious
 
-
 ; On game restart
 if Goo1.AuxVarGetFlt "*CharPre_Init" != 1
 	Goo1.AuxVarSetFlt "*CharPre_Init" 1 0
@@ -29,12 +28,14 @@ if Goo1.AuxVarGetFlt "*CharPre_Init" != 1
 		iINI = GetGlobalVariable (EditorIDToFormID "SpecialPoints")
 	endif
 	Goo1.AuxVarSetFlt "*CharPre_Flt" (iINI - 7) 0
-
 	Goo1.AuxVarSetFlt "*CharPre_INI" (GetMaxOf 0 (GetMinOf (GetGS iTraitMenuMaxNumTraits) (GetINIFloat "Randomization:iMaxTraits" "Stentorious\CharacterBuildPresets.ini"))) 0
 	Goo1.AuxVarSetFlt "*CharPre_INI" (GetMaxOf 0 (GetMinOf (Goo1.AuxVarGetFlt "*CharPre_INI" 0) (GetINIFloat "Randomization:iMinTraits" "Stentorious\CharacterBuildPresets.ini"))) 1
+	Goo1.AuxVarSetFlt "*CharPre_INI" (GetINIFloat "Preselect:bSPECIAL" "Stentorious\CharacterBuildPresets.ini") 2
+	Goo1.AuxVarSetFlt "*CharPre_INI" (GetINIFloat "Preselect:bTagSkills" "Stentorious\CharacterBuildPresets.ini") 3
 
+	; Character Preset Menu support
 	if eval GetPluginVersion "Race Preset Menu" > 0
-		Goo1.AuxVarSetFlt "*CharPre_INI" 1 2
+		Goo1.AuxVarSetFlt "*CharPre_INI" 1 4
 	else
 		SetOnMenuClickEventHandler ({int iMenuID, int iTileID, string_var sTileName} => SetUIStringAlt "RaceSexMenu\NOGLOW_BRANCH\RSM_Background\RSM_back_button\string" (Sv_ToUpper (GetStringSetting "sBack"))) 1 "RaceSexMenu\NOGLOW_BRANCH\RSM_Background\RSM_next_button"
 	endif
@@ -52,12 +53,12 @@ if Goo1.AuxVarGetFlt "*CharPre_Init" != 1
 	;SetEventHandler "OnButtonDown:8192" ({int iKeyID} => Call (CompileScript "CharacterBuildPresets\BackButton.gek"))
 
 	; Preselect SPECIAL\tag skills
-	if GetINIFloat "General:bPreselectTagSkills" "Stentorious\CharacterBuildPresets.ini" == 1 || GetINIFloat "General:bPreselectSPECIAL" "Stentorious\CharacterBuildPresets.ini" == 1
+	if Goo1.AuxVarGetFlt "*CharPre_INI" 2 == 1 || Goo1.AuxVarGetFlt "*CharPre_INI" 3 == 1
 		SetOnMenuOpenEventHandler (CompileScript "CharacterBuildPresets\CharGenMenu.gek") 1 1048
 	endif
 
 	; Preselect traits
-	if GetINIFloat "General:bPreselectTraits" "Stentorious\CharacterBuildPresets.ini" == 1
+	if GetINIFloat "Preselect:bTraits" "Stentorious\CharacterBuildPresets.ini" == 1
 		SetOnMenuOpenEventHandler (CompileScript "CharacterBuildPresets\TraitMenu.gek") 1 1084
 	endif
 

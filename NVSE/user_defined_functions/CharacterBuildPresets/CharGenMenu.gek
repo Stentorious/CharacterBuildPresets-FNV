@@ -11,7 +11,7 @@ begin Function {iMenuID}
 		if eval Goo1.AuxVarType "CharPre_Cache" 1 == 1
 
 			; Preselect SPECIAL
-			if eval GetUIFloatAlt "CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ItemList\childcount" == 9 && (iMenuID == 1 || GetINIFloat "General:bPreselectSPECIAL" "Stentorious\CharacterBuildPresets.ini" == 1)
+			if eval GetUIFloatAlt "CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ItemList\childcount" == 9 && (iMenuID == 1 || Goo1.AuxVarGetFlt "*CharPre_INI" 2 == 1)
 
 				; Set all SPECIAL = 1
 				iTile = 7
@@ -28,7 +28,7 @@ begin Function {iMenuID}
 				PlaySound UIMenuOk 1
 
 			; Preselect tag skills
-			elseif eval iMenuID == 1 || GetINIFloat "General:bPreselectTagSkills" "Stentorious\CharacterBuildPresets.ini" == 1
+			elseif eval iMenuID == 1 || Goo1.AuxVarGetFlt "*CharPre_INI" 3 == 1
 
 				sTag0 = ("CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ItemList\" + (AVStringC (StringToActorValue (Goo1.AuxVarGetStr "CharPre_Cache" 8)) 1))
 				sTag1 = ("CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ItemList\" + (AVStringC (StringToActorValue (Goo1.AuxVarGetStr "CharPre_Cache" 9)) 1))
