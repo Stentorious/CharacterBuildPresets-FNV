@@ -1,0 +1,11 @@
+<_y>
+	<copy> 0 </copy>
+	<add>
+		<copy src="sibling(CGM_RandomButton)" trait="height" />
+		<onlyif src="sibling(CGM_RandomButton)" trait="visible" />
+	</add>
+	<add>
+		<copy src="sibling(CGM_PresetButton)" trait="height" />
+		<onlyif src="sibling(CGM_PresetButton)" trait="visible" />
+	</add>
+</_y>

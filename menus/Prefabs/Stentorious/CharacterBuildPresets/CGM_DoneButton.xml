@@ -1,7 +1,7 @@
 <_y>
-	<copy src="sibling(CGM_PresetButton)" trait="_y" />
+	<copy src="sibling(CGM_ResetButton)" trait="_y" />
 	<add>
-		<copy src="sibling(CGM_PresetButton)" trait="height" />
-		<onlyif src="sibling(CGM_PresetButton)" trait="visible" />
+		<copy src="sibling(CGM_ResetButton)" trait="height" />
+		<onlyif src="sibling(CGM_ResetButton)" trait="visible" />
 	</add>
 </_y>
