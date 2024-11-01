@@ -29,14 +29,14 @@ endif
 SetOnMenuClickEventHandler ({int iMenuID, int iTileID, string_var sTileName} => Call (CompileScript "CharacterBuildPresets\CharGenMenu.gek") 1) 1 "CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ButtonRect\CGM_PresetButton"
 SetOnMenuClickEventHandler ({int iMenuID, int iTileID, string_var sTileName} => Call (CompileScript "CharacterBuildPresets\TraitMenu.gek") 1) 1 "TraitMenu\NOGLOW_BRANCH\LUM_MainRect\LUM_ButtonRect\LUM_PresetButton"
 
-; Detect "Q" key press
+; Detect "P" key press
 SetOnKeyDownEventHandler (begin function {int iKeyID}
 	if eval GetActiveMenuMode == 1048 && GetUIFloatAlt "CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ButtonRect\CGM_PresetButton\visible" == 1
 		Call (CompileScript "CharacterBuildPresets\CharGenMenu.gek") 1
 	elseif eval GetActiveMenuMode == 1084 && GetUIFloatAlt "TraitMenu\NOGLOW_BRANCH\LUM_MainRect\LUM_ButtonRect\LUM_PresetButton\visible" == 1
 		Call (CompileScript "CharacterBuildPresets\TraitMenu.gek") 1
 	endif
-end) 1 16
+end) 1 25
 
 ; Detect gamepad "Right Stick" button press
 SetEventHandler "OnButtonDown:128" (begin function {int iKeyID}
