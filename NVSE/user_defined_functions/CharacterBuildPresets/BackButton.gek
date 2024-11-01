@@ -1,0 +1,12 @@
+int iIndex
+int iRMP
+
+begin Function {}
+
+	iIndex = GetUIFloatAlt "RaceSexMenu\user0"
+	iRMP = Goo1.AuxVarGetFlt "*CharPre_INI" 2
+	if eval (iIndex == 0 && iRMP == 0) || (iIndex == 95 && iRMP == 1)
+		CallAfterFrames 0 (CompileScript "CharacterBuildPresets\LoadPrompt.gek") 1
+	endif
+
+end

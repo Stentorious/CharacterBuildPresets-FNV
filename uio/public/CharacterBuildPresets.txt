@@ -1,6 +1,3 @@
-Stentorious\CharacterBuildPresets\RSM_build_button.xml::RaceSexMenu::RSM_Background
-true
-
 Stentorious\CharacterBuildPresets\CGM_PresetButton.xml::CharGenMenu::CGM_ButtonRect
 true
 Stentorious\CharacterBuildPresets\CGM_ResetButton.xml::CharGenMenu::CGM_ResetButton
