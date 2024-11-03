@@ -2,6 +2,7 @@ int iButton
 int iLoop
 int iRand
 int iSize
+int iPatch
 ref rPerk
 string_var sINI
 string_var sMsgBox
@@ -122,9 +123,11 @@ begin Function {iButton}
 		; Tag skills
 		aStat = Ar_List 0, 0, 0
 		iLoop = 0
+		iPatch = GetOptionalPatch "bEnableBigGunsSkill"
+
 		while iLoop < 3
 			iRand = GetRandomInRange 32 46
-			if eval iRand != 33 && (Ar_Find iRand, aStat) == Ar_BadNumericIndex
+			if eval (iRand != 33 || iPatch == 1) && (Ar_Find iRand, aStat) == Ar_BadNumericIndex
 				aStat[iLoop] = iRand
 				iLoop += 1
 			endif
