@@ -86,7 +86,9 @@ if Goo1.AuxVarGetFlt "*CharPre_Init" != 1
 
 	; Show save preset message box on character creation completion
 	SetJohnnyOnStopQuestEventHandler 1 ({ref rQuest} => MessageBoxExAlt (CompileScript "CharacterBuildPresets\SavePrompt.gek") "^Character Stat Presets^Would you like to save %z as a Character Stat Preset?|%z|%z" (Player.LNGetName) (GetStringSetting "sYes") (GetStringSetting "sNo")) 0 VCG04
-	if eval IsModLoaded "TaleOfTwoWastelands.esm"
+	if eval IsModLoaded "AltStart.esm"
+		SetJohnnyOnStopQuestEventHandler 1 ({ref rQuest, int iStageIdx} => MessageBoxExAlt (CompileScript "CharacterBuildPresets\SavePrompt.gek") "^Character Stat Presets^Would you like to save %z as a Character Stat Preset?|%z|%z" (Player.LNGetName) (GetStringSetting "sYes") (GetStringSetting "sNo")) 0 (EditorIDToFormID "ALTStartQ")
+	elseif eval IsModLoaded "TaleOfTwoWastelands.esm"
 		SetOnQuestStageEventHandler ({ref rQuest, int iStageIdx} => MessageBoxExAlt (CompileScript "CharacterBuildPresets\SavePrompt.gek") "^Character Stat Presets^Would you like to save %z as a Character Stat Preset?|%z|%z" (Player.LNGetName) (GetStringSetting "sYes") (GetStringSetting "sNo")) 1 (EditorIDToFormID "CG04") 150
 	endif
 
