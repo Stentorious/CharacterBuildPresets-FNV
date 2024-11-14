@@ -53,7 +53,7 @@ begin Function {iMenuID}
 
 		; Disable button if no preset loaded
 		else
-			SetUIFloatAlt "CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ButtonRect\CGM_PresetButton\target" 0
+			SetUIFloatAlt "CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ButtonRect\CGM_PresetButton\visible" 0
 		endif
 	endif
 end

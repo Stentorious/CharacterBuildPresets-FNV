@@ -34,7 +34,7 @@ begin Function {iMenuID}
 
 		; Disable button if no preset loaded
 		else
-			SetUIFloatAlt "TraitMenu\NOGLOW_BRANCH\LUM_MainRect\LUM_ButtonRect\LUM_PresetButton\target" 0
+			SetUIFloatAlt "TraitMenu\NOGLOW_BRANCH\LUM_MainRect\LUM_ButtonRect\LUM_PresetButton\visible" 0
 		endif
 	endif
 end
