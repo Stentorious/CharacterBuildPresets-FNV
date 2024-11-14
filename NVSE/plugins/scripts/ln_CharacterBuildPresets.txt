@@ -1,4 +1,4 @@
-; Character Build Presets 1.1 - Stentorious
+; Character Build Presets - Stentorious
 
 ; On game restart
 if Goo1.AuxVarGetFlt "*CharPre_Init" != 1
