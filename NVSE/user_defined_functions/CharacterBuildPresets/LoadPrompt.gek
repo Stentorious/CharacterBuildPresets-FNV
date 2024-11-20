@@ -36,7 +36,8 @@ begin Function {}
 
 				; Verify tag skills
 				aStat = Sv_Split (aINI["TagSkills"]) "|"
-				if eval (Ar_Size aStat) == 3
+				iTemp = Ar_Size aStat
+				if eval iTemp == 3
 					iLoop = 0
 					while iLoop < 3
 						iTemp = StringToActorValue (aStat[iLoop])
@@ -46,6 +47,9 @@ begin Function {}
 						endif
 						iLoop += 1
 					loop
+				elseif iTemp > 3
+					iVerify = 0
+					PrintC "Malformed %z: Too many tagged skills" sFilename
 				else
 					iVerify = 0
 					PrintC "Malformed %z: Missing tagged skill(s)" sFilename
