@@ -41,12 +41,12 @@ if Goo1.AuxVarGetFlt "*CharPre_Init" != 1
 	endif
 
 	; Update RSM_back_button
-	SetOnMenuOpenEventHandler (begin function {int iKeyID}
+	SetOnMenuOpenEventHandler (begin function {int iMenuID}
 		if eval GetActiveMenuMode != 1001 && GetActiveMenuMode != 1013 && GetUIFloatAlt "RaceSexMenu\user0" == 0
 			SetJohnnyOnRenderUpdateEventHandler 1 (CompileScript "CharacterBuildPresets\RaceSexMenuLoop.gek") 0
 		endif
 	end) 1 1036
-	SetOnMenuCloseEventHandler ({int iKeyID} => SetJohnnyOnRenderUpdateEventHandler 0 (CompileScript "CharacterBuildPresets\RaceSexMenuLoop.gek")) 1 1036
+	SetOnMenuCloseEventHandler ({int iMenuID} => SetJohnnyOnRenderUpdateEventHandler 0 (CompileScript "CharacterBuildPresets\RaceSexMenuLoop.gek")) 1 1036
 
 	; Show load preset message box in race menu
 	SetOnMenuClickEventHandler ({int iMenuID, int iTileID, string_var sTileName} => Call (CompileScript "CharacterBuildPresets\BackButton.gek")) 1 "RaceSexMenu\NOGLOW_BRANCH\RSM_Background\RSM_back_button"
@@ -85,11 +85,11 @@ if Goo1.AuxVarGetFlt "*CharPre_Init" != 1
 	end)
 
 	; Show save preset message box on character creation completion
-	SetJohnnyOnStopQuestEventHandler 1 ({ref rQuest} => MessageBoxExAlt (CompileScript "CharacterBuildPresets\SavePrompt.gek") "^Character Stat Presets^Would you like to save %z as a Character Stat Preset?|%z|%z" (Player.LNGetName) (GetStringSetting "sYes") (GetStringSetting "sNo")) 0 VCG04
+	SetJohnnyOnStopQuestEventHandler 1 ({ref rQuest} => MessageBoxExAlt (CompileScript "CharacterBuildPresets\SavePrompt.gek") "^Character Stat Presets^Would you like to save %z as a Character Stat Preset?|%z|%z" (Player.LNGetName) (GetStringSetting "sNo") (GetStringSetting "sYes")) 0 VCG04
 	if eval IsModLoaded "AltStart.esm"
-		SetJohnnyOnStopQuestEventHandler 1 ({ref rQuest, int iStageIdx} => MessageBoxExAlt (CompileScript "CharacterBuildPresets\SavePrompt.gek") "^Character Stat Presets^Would you like to save %z as a Character Stat Preset?|%z|%z" (Player.LNGetName) (GetStringSetting "sYes") (GetStringSetting "sNo")) 0 (EditorIDToFormID "ALTStartQ")
+		SetJohnnyOnStopQuestEventHandler 1 ({ref rQuest, int iStageIdx} => MessageBoxExAlt (CompileScript "CharacterBuildPresets\SavePrompt.gek") "^Character Stat Presets^Would you like to save %z as a Character Stat Preset?|%z|%z" (Player.LNGetName) (GetStringSetting "sNo") (GetStringSetting "sYes")) 0 (EditorIDToFormID "ALTStartQ")
 	elseif eval IsModLoaded "TaleOfTwoWastelands.esm"
-		SetOnQuestStageEventHandler ({ref rQuest, int iStageIdx} => MessageBoxExAlt (CompileScript "CharacterBuildPresets\SavePrompt.gek") "^Character Stat Presets^Would you like to save %z as a Character Stat Preset?|%z|%z" (Player.LNGetName) (GetStringSetting "sYes") (GetStringSetting "sNo")) 1 (EditorIDToFormID "CG04") 150
+		SetOnQuestStageEventHandler ({ref rQuest, int iStageIdx} => MessageBoxExAlt (CompileScript "CharacterBuildPresets\SavePrompt.gek") "^Character Stat Presets^Would you like to save %z as a Character Stat Preset?|%z|%z" (Player.LNGetName) (GetStringSetting "sNo") (GetStringSetting "sYes")) 1 (EditorIDToFormID "CG04") 150
 	endif
 
 endif
