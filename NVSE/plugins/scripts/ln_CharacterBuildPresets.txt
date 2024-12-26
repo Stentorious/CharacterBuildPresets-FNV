@@ -62,6 +62,11 @@ if Goo1.AuxVarGetFlt "*CharPre_Init" != 1
 		SetOnMenuOpenEventHandler (CompileScript "CharacterBuildPresets\TraitMenu.gek") 1 1084
 	endif
 
+	; SPECIAL book menu fix
+	if eval IsModLoaded "TaleOfTwoWastelands.esm"
+		SetOnMenuOpenEventHandler (CompileScript "CharacterBuildPresets\SPECIALBookMenu.gek") 1 1060
+	endif
+
 	; Detect button press
 	SetOnMenuClickEventHandler ({int iMenuID, int iTileID, string_var sTileName} => Call (CompileScript "CharacterBuildPresets\CharGenMenu.gek") 1) 1 "CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ButtonRect\CGM_PresetButton"
 	SetOnMenuClickEventHandler ({int iMenuID, int iTileID, string_var sTileName} => Call (CompileScript "CharacterBuildPresets\TraitMenu.gek") 1) 1 "TraitMenu\NOGLOW_BRANCH\LUM_MainRect\LUM_ButtonRect\LUM_PresetButton"

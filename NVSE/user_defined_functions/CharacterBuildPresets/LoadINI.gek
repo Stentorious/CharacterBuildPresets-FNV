@@ -10,13 +10,15 @@ begin Function {iButton}
 		Player.LNSetName (Goo1.AuxVarGetStr "CharPre_Cache" 0)
 
 		; Set SPECIAL
-		Player.SetAV Strength (Goo1.AuxVarGetFlt "CharPre_Cache" 1)
-		Player.SetAV Perception (Goo1.AuxVarGetFlt "CharPre_Cache" 2)
-		Player.SetAV Endurance (Goo1.AuxVarGetFlt "CharPre_Cache" 3)
-		Player.SetAV Charisma (Goo1.AuxVarGetFlt "CharPre_Cache" 4)
-		Player.SetAV Intelligence (Goo1.AuxVarGetFlt "CharPre_Cache" 5)
-		Player.SetAV Agility (Goo1.AuxVarGetFlt "CharPre_Cache" 6)
-		Player.SetAV Luck (Goo1.AuxVarGetFlt "CharPre_Cache" 7)
+		if eval !(IsModLoaded "TaleOfTwoWastelands.esm" && GetQR (EditorIDToFormID "CG00"))
+			Player.SetAV Strength (Goo1.AuxVarGetFlt "CharPre_Cache" 1)
+			Player.SetAV Perception (Goo1.AuxVarGetFlt "CharPre_Cache" 2)
+			Player.SetAV Endurance (Goo1.AuxVarGetFlt "CharPre_Cache" 3)
+			Player.SetAV Charisma (Goo1.AuxVarGetFlt "CharPre_Cache" 4)
+			Player.SetAV Intelligence (Goo1.AuxVarGetFlt "CharPre_Cache" 5)
+			Player.SetAV Agility (Goo1.AuxVarGetFlt "CharPre_Cache" 6)
+			Player.SetAV Luck (Goo1.AuxVarGetFlt "CharPre_Cache" 7)
+		endif
 
 		; Set tag skills
 		SetPlayerTagSkill (Goo1.AuxVarGetStr "CharPre_Cache" 8) 0
