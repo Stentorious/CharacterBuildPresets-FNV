@@ -1,33 +1,33 @@
 int iButton
+
 int iCount
 int iAvailable
 
 begin Function {iButton}
 
-	; Verify SPECIAL
-	if iButton == 0
-
-		; Calculate preset SPECIAL points
-		iCount += Goo1.AuxVarGetFlt "CharPre_Cache" 1
-		iCount += Goo1.AuxVarGetFlt "CharPre_Cache" 2
-		iCount += Goo1.AuxVarGetFlt "CharPre_Cache" 3
-		iCount += Goo1.AuxVarGetFlt "CharPre_Cache" 4
-		iCount += Goo1.AuxVarGetFlt "CharPre_Cache" 5
-		iCount += Goo1.AuxVarGetFlt "CharPre_Cache" 6
-		iCount += Goo1.AuxVarGetFlt "CharPre_Cache" 7
-
-		; Available SPECIAL points
-		iAvailable = Goo1.AuxVarGetFlt "*CharPre_Flt" 0 + 7
-
-		; Preset SPECIAL != available SPECIAL
-		if eval iCount != iAvailable
-			MessageBoxExAlt (CompileScript "CharacterBuildPresets\VerifyTrait.gek") "^Preset Warning^SPECIAL point mismatch!%r%rPreset SPECIAL: %g%rAvailable SPECIAL: %g|%z|%z" iCount iAvailable (GetStringSetting "sContinue") (GetStringSetting "sCancel")
-		else
-			Call (CompileScript "CharacterBuildPresets\VerifyTrait.gek") 0
-		endif
-
-	else
+	if eval iButton > 0
 		Call (CompileScript "CharacterBuildPresets\LoadPrompt.gek")
+		return
+	endif
+
+	; Verify SPECIAL
+	; Calculate preset SPECIAL points
+	iCount += Goo1.AuxVarGetFlt "CharPre_Cache" 1
+	iCount += Goo1.AuxVarGetFlt "CharPre_Cache" 2
+	iCount += Goo1.AuxVarGetFlt "CharPre_Cache" 3
+	iCount += Goo1.AuxVarGetFlt "CharPre_Cache" 4
+	iCount += Goo1.AuxVarGetFlt "CharPre_Cache" 5
+	iCount += Goo1.AuxVarGetFlt "CharPre_Cache" 6
+	iCount += Goo1.AuxVarGetFlt "CharPre_Cache" 7
+
+	; Available SPECIAL points
+	iAvailable = Goo1.AuxVarGetFlt "*CharPre_Flt" 0 + 7
+
+	; Preset SPECIAL != available SPECIAL
+	if eval iCount != iAvailable
+		MessageBoxExAlt (CompileScript "CharacterBuildPresets\VerifyTrait.gek") (GetINIString "Strings:sWarningSPECIAL" "Stentorious\Translate\CharacterBuildPresets.ini") iCount iAvailable (GetStringSetting "sContinue") (GetStringSetting "sCancel")
+	else
+		Call (CompileScript "CharacterBuildPresets\VerifyTrait.gek") 0
 	endif
 
 end

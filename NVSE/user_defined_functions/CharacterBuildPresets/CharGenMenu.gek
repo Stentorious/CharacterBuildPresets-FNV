@@ -1,4 +1,5 @@
 int	iMenuID
+
 int iTile
 string_var sTag0
 string_var sTag1
@@ -7,53 +8,55 @@ string_var sTag2
 begin Function {iMenuID}
 
 	; Prevent pause menu close and non character creation changes triggering preselect
-	if eval GetActiveMenuMode != 1013 && GetUIFloatAlt "CharGenMenu\_OnlyAdd" == 0
-		if eval Goo1.AuxVarType "CharPre_Cache" 1 == 1
-
-			; Preselect SPECIAL
-			if eval GetUIFloatAlt "CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ItemList\childcount" == 9 && (iMenuID == 1 || Goo1.AuxVarGetFlt "*CharPre_INI" 2 == 1)
-
-				; Set all SPECIAL = 1
-				iTile = 7
-				while (iTile -= 1) > -1
-					ClickMenuButton ("CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ItemList\CGM_Attribute:" + $iTile + "\CGM_Template_LeftArrow") ((GetUIFloatAlt ("CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ItemList\CGM_Attribute:" + $iTile + "\_BaseValue") + GetUIFloatAlt ("CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ItemList\CGM_Attribute:" + $iTile + "\_AddedValue")) - 1)
-				loop
-
-				; Set SPECIAL to preset
-				iTile = 7
-				while (iTile -= 1) > -1
-					ClickMenuButton ("CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ItemList\CGM_Attribute:" + $iTile + "\CGM_Template_RightArrow") ((Goo1.AuxVarGetFlt "CharPre_Cache" (7 - iTile)) - 1)
-				loop
-
-				PlaySound UIMenuOk 1
-
-			; Preselect tag skills
-			elseif eval iMenuID == 1 || Goo1.AuxVarGetFlt "*CharPre_INI" 3 == 1
-
-				sTag0 = ("CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ItemList\" + (AVStringC (StringToActorValue (Goo1.AuxVarGetStr "CharPre_Cache" 8)) 1))
-				sTag1 = ("CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ItemList\" + (AVStringC (StringToActorValue (Goo1.AuxVarGetStr "CharPre_Cache" 9)) 1))
-				sTag2 = ("CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ItemList\" + (AVStringC (StringToActorValue (Goo1.AuxVarGetStr "CharPre_Cache" 10)) 1))
-
-				; Update preset tag skills if any aren't selected
-				if eval GetUIFloatAlt ((sTag0) + "\_selected") == 0 || GetUIFloatAlt ((sTag1) + "\_selected") == 0 || GetUIFloatAlt ((sTag2) + "\_selected") == 0
-
-					; Reset tag skills
-					ClickMenuButton "CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ButtonRect\CGM_ResetButton" 1
-
-					; Select preset tag skills
-					ClickMenuButton (sTag0) 1
-					ClickMenuButton (sTag1) 1
-					ClickMenuButton (sTag2) 1
-
-				endif
-
-				Sv_Destruct sTag0 sTag1 sTag2
-
-			endif
-
-		; Disable button if no preset loaded
-		else
-			SetUIFloatAlt "CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ButtonRect\CGM_PresetButton\visible" 0
-		endif
+	if eval GetActiveMenuMode == 1013 || GetUIFloatAlt "CharGenMenu\_OnlyAdd"
+		return
 	endif
+
+	; Disable button if no preset loaded
+	if eval Goo1.AuxVarType "CharPre_Cache" 1 != 1
+		SetUIFloatAlt "CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ButtonRect\CGM_PresetButton\visible" 0
+		return
+	endif
+
+	; Preselect SPECIAL
+	if eval GetUIFloatAlt "CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ItemList\childcount" == 9 && (iMenuID == 1 || Goo1.AuxVarGetFlt "*CharPre_INI" 2 == 1)
+
+		; Set all SPECIAL = 1
+		iTile = 7
+		while (iTile -= 1) > -1
+			ClickMenuButton ("CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ItemList\CGM_Attribute:" + $iTile + "\CGM_Template_LeftArrow") ((GetUIFloatAlt ("CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ItemList\CGM_Attribute:" + $iTile + "\_BaseValue") + GetUIFloatAlt ("CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ItemList\CGM_Attribute:" + $iTile + "\_AddedValue")) - 1)
+		loop
+
+		; Set SPECIAL to preset
+		iTile = 7
+		while (iTile -= 1) > -1
+			ClickMenuButton ("CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ItemList\CGM_Attribute:" + $iTile + "\CGM_Template_RightArrow") ((Goo1.AuxVarGetFlt "CharPre_Cache" (7 - iTile)) - 1)
+		loop
+
+		PlaySound UIMenuOk 1
+
+	; Preselect tag skills
+	elseif eval iMenuID == 1 || Goo1.AuxVarGetFlt "*CharPre_INI" 3 == 1
+
+		sTag0 = ("CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ItemList\" + (AVStringC (StringToActorValue (Goo1.AuxVarGetStr "CharPre_Cache" 8)) 1))
+		sTag1 = ("CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ItemList\" + (AVStringC (StringToActorValue (Goo1.AuxVarGetStr "CharPre_Cache" 9)) 1))
+		sTag2 = ("CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ItemList\" + (AVStringC (StringToActorValue (Goo1.AuxVarGetStr "CharPre_Cache" 10)) 1))
+
+		; Update preset tag skills if any aren't selected
+		if eval GetUIFloatAlt ((sTag0) + "\_selected") == 0 || GetUIFloatAlt ((sTag1) + "\_selected") == 0 || GetUIFloatAlt ((sTag2) + "\_selected") == 0
+
+			; Reset tag skills
+			ClickMenuButton "CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ButtonRect\CGM_ResetButton" 1
+
+			; Select preset tag skills
+			ClickMenuButton (sTag0) 1
+			ClickMenuButton (sTag1) 1
+			ClickMenuButton (sTag2) 1
+
+		endif
+
+		Sv_Destruct sTag0 sTag1 sTag2
+
+	endif
+
 end

@@ -14,7 +14,7 @@ begin Function {}
 
 	; Build message box string with available presets
 	aPresets = GetFilesInFolder "CharacterBuildPresets" "*.ini"
-	sMsgBox = "^Character Build Presets^"
+	sMsgBox = sv_Construct "^%z^" (GetINIString "Strings:sTitlePreset" "Stentorious\Translate\CharacterBuildPresets.ini")
 	Goo1.AuxVarErase "*CharPre_File"
 	if aPresets
 		aVerify = Ar_List "Agility", "Charisma", "Endurance", "Intelligence", "Luck", "Name", "Perception", "Strength", "TagSkills", "Traits"
@@ -60,7 +60,7 @@ begin Function {}
 			if iVerify
 				Goo1.AuxVarSetStr "*CharPre_File" (sFilename) -1
 				Sv_Replace ".ini|" sFilename
-				sMsgBox = Sv_Construct "%z|%z" sMsgBox sFilename
+				sMsgBox += Sv_Construct "|%z" sFilename
 				iCount += 1
 			endif
 

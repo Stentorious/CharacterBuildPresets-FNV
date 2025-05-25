@@ -1,9 +1,10 @@
 begin Function {}
 
 	; Force back button visibility
-	if GetUIFloatAlt "RaceSexMenu\NOGLOW_BRANCH\RSM_Background\RSM_back_button\visible" == 0
-		SetUIFloatAlt "RaceSexMenu\NOGLOW_BRANCH\RSM_Background\RSM_back_button\visible" 1
-		SetUIStringAlt "RaceSexMenu\NOGLOW_BRANCH\RSM_Background\RSM_back_button\string" "BUILDS"
+	if eval GetUIFloatAlt "RaceSexMenu\NOGLOW_BRANCH\RSM_Background\RSM_back_button\visible"
+		return
 	endif
+	SetUIFloatAlt "RaceSexMenu\NOGLOW_BRANCH\RSM_Background\RSM_back_button\visible" 1
+	SetUIStringAlt "RaceSexMenu\NOGLOW_BRANCH\RSM_Background\RSM_back_button\string" (GetINIString "Strings:sButtonBuilds" "Stentorious\Translate\CharacterBuildPresets.ini")
 
 end

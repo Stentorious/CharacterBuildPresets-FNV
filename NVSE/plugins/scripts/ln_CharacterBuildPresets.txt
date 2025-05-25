@@ -1,100 +1,106 @@
 ; Character Build Presets - Stentorious
 
+; On game load
+SetJohnnyOnRenderUpdateEventHandler 0 (CompileScript "CharacterBuildPresets\RaceSexMenuLoop.gek")
+
 ; On game restart
-if Goo1.AuxVarGetFlt "*CharPre_Init" != 1
-	Goo1.AuxVarSetFlt "*CharPre_Init" 1 0
+if eval Goo1.AuxVarGetFlt "*CharPre_Init"
+	Return
+endif
+Goo1.AuxVarSetFlt "*CharPre_Init" 1
 
-	; Check for requirements
-	if GetNVSEVersion > 5 && GetNVSERevision > 2 && GetNVSEBeta > 2
-	else
-		MessageBoxEx "Character Build Presets missing requirement!%rInstall xNVSE 6.3.3+."
-		return
-	endif
-	if GetPluginVersion "JohnnyGuitarNVSE" < 390
-		MessageBoxEx "Character Build Presets missing requirement!%rInstall latest JohnnyGuitar NVSE plugin."
-		return
-	endif
-	if GetPluginVersion "UI Organizer Plugin" < 230
-		MessageBoxEx "Character Build Presets missing requirement!%rInstall latest User Interface Organizer plugin."
-		return
-	endif
-	Goo1.AuxVarSetFlt "*CharPre_Init" 1 1
-
-	; Load INI settings
-	int iINI = 40
-	if eval GetINIFloat "Tweaks:bCustomSpecialPoints" "..\nvse\plugins\nvse_stewie_tweaks.ini" == 1
-		iINI = GetINIFloat "SPECIAL Points:iNumPointsToAllocate" "..\nvse\plugins\nvse_stewie_tweaks.ini"
-	elseif eval IsModLoaded "ROOG.esp" || IsModLoaded "ROOGNV.esp"
-		iINI = GetGlobalVariable (EditorIDToFormID "SpecialPoints")
-	endif
-	Goo1.AuxVarSetFlt "*CharPre_Flt" (iINI - 7) 0
-	Goo1.AuxVarSetFlt "*CharPre_INI" (GetMaxOf 0 (GetMinOf (GetGS iTraitMenuMaxNumTraits) (GetINIFloat "Randomization:iMaxTraits" "Stentorious\CharacterBuildPresets.ini"))) 0
-	Goo1.AuxVarSetFlt "*CharPre_INI" (GetMaxOf 0 (GetMinOf (Goo1.AuxVarGetFlt "*CharPre_INI" 0) (GetINIFloat "Randomization:iMinTraits" "Stentorious\CharacterBuildPresets.ini"))) 1
-	Goo1.AuxVarSetFlt "*CharPre_INI" (GetINIFloat "Preselect:bSPECIAL" "Stentorious\CharacterBuildPresets.ini") 2
-	Goo1.AuxVarSetFlt "*CharPre_INI" (GetINIFloat "Preselect:bTagSkills" "Stentorious\CharacterBuildPresets.ini") 3
-
-	; Character Preset Menu support
-	if eval GetPluginVersion "Race Preset Menu" > 0
-		Goo1.AuxVarSetFlt "*CharPre_INI" 1 4
-	else
-		SetOnMenuClickEventHandler ({int iMenuID, int iTileID, string_var sTileName} => SetUIStringAlt "RaceSexMenu\NOGLOW_BRANCH\RSM_Background\RSM_back_button\string" (Sv_ToUpper (GetStringSetting "sBack"))) 1 "RaceSexMenu\NOGLOW_BRANCH\RSM_Background\RSM_next_button"
-	endif
-
-	; Update RSM_back_button
-	SetOnMenuOpenEventHandler (begin function {int iMenuID}
-		if eval GetActiveMenuMode != 1001 && GetActiveMenuMode != 1013 && GetUIFloatAlt "RaceSexMenu\user0" == 0
-			SetJohnnyOnRenderUpdateEventHandler 1 (CompileScript "CharacterBuildPresets\RaceSexMenuLoop.gek") 0
-		endif
-	end) 1 1036
-	SetOnMenuCloseEventHandler ({int iMenuID} => SetJohnnyOnRenderUpdateEventHandler 0 (CompileScript "CharacterBuildPresets\RaceSexMenuLoop.gek")) 1 1036
-
-	; Show load preset message box in race menu
-	SetOnMenuClickEventHandler ({int iMenuID, int iTileID, string_var sTileName} => Call (CompileScript "CharacterBuildPresets\BackButton.gek")) 1 "RaceSexMenu\NOGLOW_BRANCH\RSM_Background\RSM_back_button"
-	;SetEventHandler "OnButtonDown:8192" ({int iKeyID} => Call (CompileScript "CharacterBuildPresets\BackButton.gek"))
-
-	; Preselect SPECIAL\tag skills
-	if Goo1.AuxVarGetFlt "*CharPre_INI" 2 == 1 || Goo1.AuxVarGetFlt "*CharPre_INI" 3 == 1
-		SetOnMenuOpenEventHandler (CompileScript "CharacterBuildPresets\CharGenMenu.gek") 1 1048
-	endif
-
-	; Preselect traits
-	if GetINIFloat "Preselect:bTraits" "Stentorious\CharacterBuildPresets.ini" == 1
-		SetOnMenuOpenEventHandler (CompileScript "CharacterBuildPresets\TraitMenu.gek") 1 1084
-	endif
-
-	; Detect button press
-	SetOnMenuClickEventHandler ({int iMenuID, int iTileID, string_var sTileName} => Call (CompileScript "CharacterBuildPresets\CharGenMenu.gek") 1) 1 "CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ButtonRect\CGM_PresetButton"
-	SetOnMenuClickEventHandler ({int iMenuID, int iTileID, string_var sTileName} => Call (CompileScript "CharacterBuildPresets\TraitMenu.gek") 1) 1 "TraitMenu\NOGLOW_BRANCH\LUM_MainRect\LUM_ButtonRect\LUM_PresetButton"
-
-	; Detect "P" key press
-	SetOnKeyDownEventHandler (begin function {int iKeyID}
-		if eval GetActiveMenuMode == 1048 && GetUIFloatAlt "CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ButtonRect\CGM_PresetButton\visible" == 1
-			Call (CompileScript "CharacterBuildPresets\CharGenMenu.gek") 1
-		elseif eval GetActiveMenuMode == 1084 && GetUIFloatAlt "TraitMenu\NOGLOW_BRANCH\LUM_MainRect\LUM_ButtonRect\LUM_PresetButton\visible" == 1
-			Call (CompileScript "CharacterBuildPresets\TraitMenu.gek") 1
-		endif
-	end) 1 25
-
-	; Detect gamepad "Right Stick" button press
-	SetEventHandler "OnButtonDown:128" (begin function {int iKeyID}
-		if eval GetActiveMenuMode == 1048 && GetUIFloatAlt "CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ButtonRect\CGM_PresetButton\visible" == 1
-			Call (CompileScript "CharacterBuildPresets\CharGenMenu.gek") 1
-		elseif eval GetActiveMenuMode == 1084 && GetUIFloatAlt "TraitMenu\NOGLOW_BRANCH\LUM_MainRect\LUM_ButtonRect\LUM_PresetButton\visible" == 1
-			Call (CompileScript "CharacterBuildPresets\TraitMenu.gek") 1
-		endif
-	end)
-
-	; Show save preset message box on character creation completion
-	SetJohnnyOnStopQuestEventHandler 1 ({ref rQuest} => MessageBoxExAlt (CompileScript "CharacterBuildPresets\SavePrompt.gek") "^Character Stat Presets^Would you like to save %z as a Character Stat Preset?|%z|%z" (Player.LNGetName) (GetStringSetting "sNo") (GetStringSetting "sYes")) 0 VCG04
-	if eval IsModLoaded "AltStart.esm"
-		SetJohnnyOnStopQuestEventHandler 1 ({ref rQuest, int iStageIdx} => MessageBoxExAlt (CompileScript "CharacterBuildPresets\SavePrompt.gek") "^Character Stat Presets^Would you like to save %z as a Character Stat Preset?|%z|%z" (Player.LNGetName) (GetStringSetting "sNo") (GetStringSetting "sYes")) 0 (EditorIDToFormID "ALTStartQ")
-	elseif eval IsModLoaded "TaleOfTwoWastelands.esm"
-		SetOnQuestStageEventHandler ({ref rQuest, int iStageIdx} => MessageBoxExAlt (CompileScript "CharacterBuildPresets\SavePrompt.gek") "^Character Stat Presets^Would you like to save %z as a Character Stat Preset?|%z|%z" (Player.LNGetName) (GetStringSetting "sNo") (GetStringSetting "sYes")) 1 (EditorIDToFormID "CG04") 150
-	endif
-
+; Check for requirements
+if GetNVSEVersion > 5 && GetNVSERevision > 2 && GetNVSEBeta > 9
+else
+	MessageBoxEx "Character Build Presets missing requirement!%rInstall xNVSE 6.3.10+."
+	return
+endif
+if GetPluginVersion "JohnnyGuitarNVSE" < 390
+	MessageBoxEx "Character Build Presets missing requirement!%rInstall latest JohnnyGuitar NVSE plugin."
+	return
+endif
+if GetPluginVersion "lStewieAl's Tweaks" < 960
+	MessageBoxEx "Character Build Presets missing requirement!%rInstall lStewieAl's Tweaks 9.60+."
+	return
+endif
+if GetPluginVersion "UI Organizer Plugin" < 230
+	MessageBoxEx "Character Build Presets missing requirement!%rInstall latest User Interface Organizer plugin."
+	return
 endif
 
-; On game load
-if Goo1.AuxVarGetFlt "*CharPre_Init" 1 == 1
-	SetJohnnyOnRenderUpdateEventHandler 0 (CompileScript "CharacterBuildPresets\RaceSexMenuLoop.gek")
+; Load INI settings
+int iINI = 40
+if eval (StewVal "bCustomSpecialPoints:Tweaks") == 1
+	iINI = StewVal "iNumPointsToAllocate:SPECIAL Points"
+elseif eval IsModLoaded "ROOG.esp" || IsModLoaded "ROOGNV.esp"
+	iINI = GetGlobalVariable (EditorIDToFormID "SpecialPoints")
+endif
+Goo1.AuxVarSetFlt "*CharPre_Flt" (iINI - 7) 0
+Goo1.AuxVarSetFlt "*CharPre_INI" (GetMaxOf 0 (GetMinOf (GetGS iTraitMenuMaxNumTraits) (GetINIFloat "Randomization:iMaxTraits" "Stentorious\CharacterBuildPresets.ini"))) 0
+Goo1.AuxVarSetFlt "*CharPre_INI" (GetMaxOf 0 (GetMinOf (Goo1.AuxVarGetFlt "*CharPre_INI" 0) (GetINIFloat "Randomization:iMinTraits" "Stentorious\CharacterBuildPresets.ini"))) 1
+Goo1.AuxVarSetFlt "*CharPre_INI" (GetINIFloat "Preselect:bSPECIAL" "Stentorious\CharacterBuildPresets.ini") 2
+Goo1.AuxVarSetFlt "*CharPre_INI" (GetINIFloat "Preselect:bTagSkills" "Stentorious\CharacterBuildPresets.ini") 3
+
+; Character Preset Menu support
+if eval GetPluginVersion "Race Preset Menu" > 0
+	Goo1.AuxVarSetFlt "*CharPre_INI" 1 4
+else
+	SetOnMenuClickEventHandler ({int iMenuID, int iTileID, string_var sTileName} => SetUIStringAlt "RaceSexMenu\NOGLOW_BRANCH\RSM_Background\RSM_back_button\string" (Sv_ToUpper (GetStringSetting "sBack"))) 1 "RaceSexMenu\NOGLOW_BRANCH\RSM_Background\RSM_next_button"
+endif
+
+; Update RSM_back_button
+SetOnMenuOpenEventHandler (begin function {int iMenuID}
+	if eval GetActiveMenuMode != 1001 && GetActiveMenuMode != 1013 && GetUIFloatAlt "RaceSexMenu\user0" == 0
+		SetJohnnyOnRenderUpdateEventHandler 1 (CompileScript "CharacterBuildPresets\RaceSexMenuLoop.gek") 0
+	endif
+end) 1 1036
+SetOnMenuCloseEventHandler ({int iMenuID} => SetJohnnyOnRenderUpdateEventHandler 0 (CompileScript "CharacterBuildPresets\RaceSexMenuLoop.gek")) 1 1036
+
+; Show load preset message box in race menu
+SetOnMenuClickEventHandler ({int iMenuID, int iTileID, string_var sTileName} => Call (CompileScript "CharacterBuildPresets\BackButton.gek")) 1 "RaceSexMenu\NOGLOW_BRANCH\RSM_Background\RSM_back_button"
+;SetEventHandler "OnButtonDown:8192" ({int iKeyID} => Call (CompileScript "CharacterBuildPresets\BackButton.gek"))
+
+; Preselect SPECIAL\tag skills
+if Goo1.AuxVarGetFlt "*CharPre_INI" 2 == 1 || Goo1.AuxVarGetFlt "*CharPre_INI" 3 == 1
+	SetOnMenuOpenEventHandler (CompileScript "CharacterBuildPresets\CharGenMenu.gek") 1 1048
+endif
+
+; Preselect traits
+if GetINIFloat "Preselect:bTraits" "Stentorious\CharacterBuildPresets.ini" == 1
+	SetOnMenuOpenEventHandler (CompileScript "CharacterBuildPresets\TraitMenu.gek") 1 1084
+endif
+
+; SPECIAL book menu fix
+if eval IsModLoaded "TaleOfTwoWastelands.esm"
+	SetOnMenuOpenEventHandler (CompileScript "CharacterBuildPresets\SPECIALBookMenu.gek") 1 1060
+endif
+
+; Detect button press
+SetOnMenuClickEventHandler ({int iMenuID, int iTileID, string_var sTileName} => Call (CompileScript "CharacterBuildPresets\CharGenMenu.gek") 1) 1 "CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ButtonRect\CGM_PresetButton"
+SetOnMenuClickEventHandler ({int iMenuID, int iTileID, string_var sTileName} => Call (CompileScript "CharacterBuildPresets\TraitMenu.gek") 1) 1 "TraitMenu\NOGLOW_BRANCH\LUM_MainRect\LUM_ButtonRect\LUM_PresetButton"
+
+; Detect "P" key press
+SetOnKeyDownEventHandler (begin function {int iKeyID}
+	if eval GetActiveMenuMode == 1048 && GetUIFloatAlt "CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ButtonRect\CGM_PresetButton\visible" == 1
+		Call (CompileScript "CharacterBuildPresets\CharGenMenu.gek") 1
+	elseif eval GetActiveMenuMode == 1084 && GetUIFloatAlt "TraitMenu\NOGLOW_BRANCH\LUM_MainRect\LUM_ButtonRect\LUM_PresetButton\visible" == 1
+		Call (CompileScript "CharacterBuildPresets\TraitMenu.gek") 1
+	endif
+end) 1 25
+
+; Detect gamepad "Right Stick" button press
+SetEventHandler "OnButtonDown:128" (begin function {int iKeyID}
+	if eval GetActiveMenuMode == 1048 && GetUIFloatAlt "CharGenMenu\NOGLOW_BRANCH\CGM_MainRect\CGM_ButtonRect\CGM_PresetButton\visible" == 1
+		Call (CompileScript "CharacterBuildPresets\CharGenMenu.gek") 1
+	elseif eval GetActiveMenuMode == 1084 && GetUIFloatAlt "TraitMenu\NOGLOW_BRANCH\LUM_MainRect\LUM_ButtonRect\LUM_PresetButton\visible" == 1
+		Call (CompileScript "CharacterBuildPresets\TraitMenu.gek") 1
+	endif
+end)
+
+; Show save preset message box on character creation completion
+SetJohnnyOnStopQuestEventHandler 1 ({ref rQuest} => MessageBoxExAlt (CompileScript "CharacterBuildPresets\SavePrompt.gek") (GetINIString "Strings:sMessageSave" "Stentorious\Translate\CharacterBuildPresets.ini") (Player.LNGetName) (GetStringSetting "sNo") (GetStringSetting "sYes")) 0 VCG04
+if eval IsModLoaded "AltStart.esm"
+	SetJohnnyOnStopQuestEventHandler 1 ({ref rQuest, int iStageIdx} => MessageBoxExAlt (CompileScript "CharacterBuildPresets\SavePrompt.gek") (GetINIString "Strings:sMessageSave" "Stentorious\Translate\CharacterBuildPresets.ini") (Player.LNGetName) (GetStringSetting "sNo") (GetStringSetting "sYes")) 0 (EditorIDToFormID "ALTStartQ")
+elseif eval IsModLoaded "TaleOfTwoWastelands.esm"
+	SetOnQuestStageEventHandler ({ref rQuest, int iStageIdx} => MessageBoxExAlt (CompileScript "CharacterBuildPresets\SavePrompt.gek") (GetINIString "Strings:sMessageSave" "Stentorious\Translate\CharacterBuildPresets.ini") (Player.LNGetName) (GetStringSetting "sNo") (GetStringSetting "sYes")) 1 (EditorIDToFormID "CG04") 150
 endif

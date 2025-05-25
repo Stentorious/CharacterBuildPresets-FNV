@@ -1,8 +1,8 @@
+string_var sFilename
 
-
+int iSize
 ref rPerk
 string_var sINI
-string_var sFilename
 array_var aPerks
 array_var aForE
 
@@ -14,59 +14,58 @@ begin Function {sFilename}
 	SetINIString "Preset:Name" (Player.LNGetName) (sFilename)
 
 	; SPECIAL
-	SetINIFloat "Preset:Strength" (Player.GetAV Strength) (sFilename)
-	SetINIFloat "Preset:Perception" (Player.GetAV Perception) (sFilename)
-	SetINIFloat "Preset:Endurance" (Player.GetAV Endurance) (sFilename)
-	SetINIFloat "Preset:Charisma" (Player.GetAV Charisma) (sFilename)
-	SetINIFloat "Preset:Intelligence" (Player.GetAV Intelligence) (sFilename)
-	SetINIFloat "Preset:Agility" (Player.GetAV Agility) (sFilename)
-	SetINIFloat "Preset:Luck" (Player.GetAV Luck) (sFilename)
+	SetINIFloat "Preset:Strength" (Player.GetBaseActorValue Strength) (sFilename)
+	SetINIFloat "Preset:Perception" (Player.GetBaseActorValue Perception) (sFilename)
+	SetINIFloat "Preset:Endurance" (Player.GetBaseActorValue Endurance) (sFilename)
+	SetINIFloat "Preset:Charisma" (Player.GetBaseActorValue Charisma) (sFilename)
+	SetINIFloat "Preset:Intelligence" (Player.GetBaseActorValue Intelligence) (sFilename)
+	SetINIFloat "Preset:Agility" (Player.GetBaseActorValue Agility) (sFilename)
+	SetINIFloat "Preset:Luck" (Player.GetBaseActorValue Luck) (sFilename)
 
 	; Tag skills
-	sINI = ""
 	if eval IsPlayerTagSkill Barter
-		sINI = Sv_Construct "%z|Barter" sINI
+		sINI += "|Barter"
 	endif
 	if eval IsPlayerTagSkill BigGuns
-		sINI = Sv_Construct "%z|BigGuns" sINI
+		sINI += "|BigGuns"
 	endif
 	if eval IsPlayerTagSkill EnergyWeapons
-		sINI = Sv_Construct "%z|EnergyWeapons" sINI
+		sINI += "|EnergyWeapons"
 	endif
 	if eval IsPlayerTagSkill Explosives
-		sINI = Sv_Construct "%z|Explosives" sINI
+		sINI += "|Explosives"
 	endif
 	if eval IsPlayerTagSkill Lockpick
-		sINI = Sv_Construct "%z|Lockpick" sINI
+		sINI += "|Lockpick"
 	endif
 	if eval IsPlayerTagSkill Medicine
-		sINI = Sv_Construct "%z|Medicine" sINI
+		sINI += "|Medicine"
 	endif
 	if eval IsPlayerTagSkill MeleeWeapons
-		sINI = Sv_Construct "%z|MeleeWeapons" sINI
+		sINI += "|MeleeWeapons"
 	endif
 	if eval IsPlayerTagSkill Repair
-		sINI = Sv_Construct "%z|Repair" sINI
+		sINI += "|Repair"
 	endif
 	if eval IsPlayerTagSkill Science
-		sINI = Sv_Construct "%z|Science" sINI
+		sINI += "|Science"
 	endif
 	if eval IsPlayerTagSkill Guns
-		sINI = Sv_Construct "%z|Guns" sINI
+		sINI += "|Guns"
 	endif
 	if eval IsPlayerTagSkill Sneak
-		sINI = Sv_Construct "%z|Sneak" sINI
+		sINI += "|Sneak"
 	endif
 	if eval IsPlayerTagSkill Speech
-		sINI = Sv_Construct "%z|Speech" sINI
+		sINI += "|Speech"
 	endif
 	if eval IsPlayerTagSkill Survival
-		sINI = Sv_Construct "%z|Survival" sINI
+		sINI += "|Survival"
 	endif
 	if eval IsPlayerTagSkill Unarmed
-		sINI = Sv_Construct "%z|Unarmed" sINI
+		sINI += "|Unarmed"
 	endif
-	Sv_Erase sINI, 0, 1
+	sINI[0] = ""
 	SetINIString "Preset:TagSkills" (sINI) (sFilename)
 
 	; Traits
@@ -74,12 +73,11 @@ begin Function {sFilename}
 	if aPerks
 		sINI = ""
 		foreach aForE <- aPerks
-			rPerk = (*aForE)
-			if eval IsTrait rPerk
-				sINI = Sv_Construct "%z|%z" sINI (GetEditorID rPerk)
+			if eval IsTrait (rPerk = (*aForE))
+				sINI += Sv_Construct "|%z" (GetEditorID rPerk)
 			endif
 		loop
-		Sv_Erase sINI, 0, 1
+		sINI[0] = ""
 		SetINIString "Preset:Traits" (sINI) (sFilename)
 	else
 		SetINIFloat "Preset:Traits" 0 (sFilename)

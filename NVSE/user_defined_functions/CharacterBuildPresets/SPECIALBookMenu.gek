@@ -1,0 +1,32 @@
+int	iMenuID
+
+int iCount
+
+begin Function {iMenuID}
+
+	; Set SPECIAL if preset loaded
+	if eval Goo1.AuxVarType "CharPre_Cache" 1 != 1
+		return
+	endif
+
+	; SPECIALBookMenu crash failsafe
+	iCount += Goo1.AuxVarGetFlt "CharPre_Cache" 1
+	iCount += Goo1.AuxVarGetFlt "CharPre_Cache" 2
+	iCount += Goo1.AuxVarGetFlt "CharPre_Cache" 3
+	iCount += Goo1.AuxVarGetFlt "CharPre_Cache" 4
+	iCount += Goo1.AuxVarGetFlt "CharPre_Cache" 5
+	iCount += Goo1.AuxVarGetFlt "CharPre_Cache" 6
+	iCount += Goo1.AuxVarGetFlt "CharPre_Cache" 7
+	if eval iCount > ((Goo1.AuxVarGetFlt "*CharPre_Flt" 0) + 7)
+		return
+	endif
+
+	Player.SetAV Strength (Goo1.AuxVarGetFlt "CharPre_Cache" 1)
+	Player.SetAV Perception (Goo1.AuxVarGetFlt "CharPre_Cache" 2)
+	Player.SetAV Endurance (Goo1.AuxVarGetFlt "CharPre_Cache" 3)
+	Player.SetAV Charisma (Goo1.AuxVarGetFlt "CharPre_Cache" 4)
+	Player.SetAV Intelligence (Goo1.AuxVarGetFlt "CharPre_Cache" 5)
+	Player.SetAV Agility (Goo1.AuxVarGetFlt "CharPre_Cache" 6)
+	Player.SetAV Luck (Goo1.AuxVarGetFlt "CharPre_Cache" 7)
+
+end

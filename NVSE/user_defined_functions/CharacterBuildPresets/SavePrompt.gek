@@ -4,7 +4,7 @@ begin Function {iButton}
 
 	; Prompt player input on preset save
 	if eval iButton
-		ShowTextInputMenu (CompileScript "CharacterBuildPresets\SaveINI.gek") 400 90 "Enter Preset Name:"
+		ShowTextInputMenu (CompileScript "CharacterBuildPresets\SaveINI.gek") 400 90 (GetINIString "Strings:sMessageName" "Stentorious\Translate\CharacterBuildPresets.ini")
 		SetTextInputExtendedProps 0 0 1 20 2
 		SetTextInputString (Player.LNGetName)
 	endif

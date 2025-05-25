@@ -1,4 +1,5 @@
 int	iMenuID
+
 int	iIndex
 int	iTile
 string_var sUIPath
@@ -7,34 +8,36 @@ string_var sName
 begin Function {iMenuID}
 
 	; Prevent pause menu close triggering preselect
-	if GetActiveMenuMode != 1013
-		if eval Goo1.AuxVarType "CharPre_Cache" 1 == 1
-
-			; Reset traits
-			ClickMenuButton "TraitMenu\NOGLOW_BRANCH\LUM_MainRect\LUM_ButtonRect\LUM_ResetButton" 1
-
-			; Select preset traits
-			sUIPath = "TraitMenu\NOGLOW_BRANCH\LUM_MainRect\LUM_PerkList\LUM_Perk:0"
-			while eval (sName = GetUIString (sUIPath + "\string")) != ""
-				iIndex = 11
-				while Goo1.AuxVarType "CharPre_Cache" iIndex == 4
-					if eval sName == LNGetName (EditorIDToFormID (Goo1.AuxVarGetStr "CharPre_Cache" iIndex))
-						if GetUIFloatAlt (sUIPath + "\_selected") == 0
-							ClickMenuButton (sUIPath) 1
-						endif
-						break
-					endif
-					iIndex += 1
-				loop
-				iTile += 1
-				sUIPath = "TraitMenu\NOGLOW_BRANCH\LUM_MainRect\LUM_PerkList\LUM_Perk:" + $iTile
-			loop
-
-			Sv_Destruct sUIPath sName
-
-		; Disable button if no preset loaded
-		else
-			SetUIFloatAlt "TraitMenu\NOGLOW_BRANCH\LUM_MainRect\LUM_ButtonRect\LUM_PresetButton\visible" 0
-		endif
+	if eval GetActiveMenuMode == 1013
+		return
 	endif
+
+	; Disable button if no preset loaded
+	if eval Goo1.AuxVarType "CharPre_Cache" 1 != 1
+		SetUIFloatAlt "TraitMenu\NOGLOW_BRANCH\LUM_MainRect\LUM_ButtonRect\LUM_PresetButton\visible" 0
+		return
+	endif
+
+	; Reset traits
+	ClickMenuButton "TraitMenu\NOGLOW_BRANCH\LUM_MainRect\LUM_ButtonRect\LUM_ResetButton" 1
+
+	; Select preset traits
+	sUIPath = "TraitMenu\NOGLOW_BRANCH\LUM_MainRect\LUM_PerkList\LUM_Perk:0"
+	while eval (sName = GetUIString (sUIPath + "\string")) != ""
+		iIndex = 11
+		while Goo1.AuxVarType "CharPre_Cache" iIndex == 4
+			if eval sName == LNGetName (EditorIDToFormID (Goo1.AuxVarGetStr "CharPre_Cache" iIndex))
+				if GetUIFloatAlt (sUIPath + "\_selected") == 0
+					ClickMenuButton (sUIPath) 1
+				endif
+				break
+			endif
+			iIndex += 1
+		loop
+		iTile += 1
+		sUIPath = "TraitMenu\NOGLOW_BRANCH\LUM_MainRect\LUM_PerkList\LUM_Perk:" + $iTile
+	loop
+
+	Sv_Destruct sUIPath sName
+
 end
