@@ -10,13 +10,16 @@ endif
 Goo1.AuxVarSetFlt "*CharPre_Init" 1
 
 ; Check for requirements
-if GetNVSEVersion > 5 && GetNVSERevision > 2 && GetNVSEBeta > 9
-else
-	MessageBoxEx "Character Build Presets missing requirement!%rInstall xNVSE 6.3.10+."
+if eval GetNVSEVersion < 6 || (GetNVSEVersion == 6 && GetNVSERevision < 4)
+	MessageBoxEx "Character Build Presets missing requirement!%rInstall xNVSE 6.4.0+."
 	return
 endif
 if GetPluginVersion "JohnnyGuitarNVSE" < 390
 	MessageBoxEx "Character Build Presets missing requirement!%rInstall latest JohnnyGuitar NVSE plugin."
+	return
+endif
+if GetPluginVersion "ShowOffNVSE Plugin" < 165
+	MessageBoxEx "Character Build Presets missing requirement!%rInstall latest ShowOff NVSE plugin."
 	return
 endif
 if GetPluginVersion "lStewieAl's Tweaks" < 960
@@ -32,18 +35,21 @@ endif
 int iINI = 40
 if eval (StewVal "bCustomSpecialPoints:Tweaks") == 1
 	iINI = StewVal "iNumPointsToAllocate:SPECIAL Points"
+elseif eval IsModLoaded "UF Hardercore.esp"
+	iINI = GetGlobalVariable (EditorIDToFormID "UFHardercoreSpecialPoints")
 elseif eval IsModLoaded "ROOG.esp" || IsModLoaded "ROOGNV.esp"
 	iINI = GetGlobalVariable (EditorIDToFormID "SpecialPoints")
 endif
 Goo1.AuxVarSetFlt "*CharPre_Flt" (iINI - 7) 0
-Goo1.AuxVarSetFlt "*CharPre_INI" (GetMaxOf 0 (GetMinOf (GetGS iTraitMenuMaxNumTraits) (GetINIFloat "Randomization:iMaxTraits" "Stentorious\CharacterBuildPresets.ini"))) 0
-Goo1.AuxVarSetFlt "*CharPre_INI" (GetMaxOf 0 (GetMinOf (Goo1.AuxVarGetFlt "*CharPre_INI" 0) (GetINIFloat "Randomization:iMinTraits" "Stentorious\CharacterBuildPresets.ini"))) 1
-Goo1.AuxVarSetFlt "*CharPre_INI" (GetINIFloat "Preselect:bSPECIAL" "Stentorious\CharacterBuildPresets.ini") 2
-Goo1.AuxVarSetFlt "*CharPre_INI" (GetINIFloat "Preselect:bTagSkills" "Stentorious\CharacterBuildPresets.ini") 3
+Goo1.AuxVarSetFlt "*CharPre_INI" (Clamp (GetINIFloat_Cached "Randomization:iMaxTraits" "Stentorious\CharacterBuildPresets.ini") 0 (GetGS iTraitMenuMaxNumTraits)) 0
+Goo1.AuxVarSetFlt "*CharPre_INI" (Clamp (GetINIFloat_Cached "Randomization:iMinTraits" "Stentorious\CharacterBuildPresets.ini") 0 (Goo1.AuxVarGetFlt "*CharPre_INI" 0)) 1
+Goo1.AuxVarSetFlt "*CharPre_INI" (eval GetINIFloat_Cached "Preselect:bSPECIAL" "Stentorious\CharacterBuildPresets.ini") 2
+Goo1.AuxVarSetFlt "*CharPre_INI" (eval GetINIFloat_Cached "Preselect:bTagSkills" "Stentorious\CharacterBuildPresets.ini") 3
+Goo1.AuxVarSetFlt "*CharPre_INI" (eval GetINIFloat_Cached "General:bValidatePresets" "Stentorious\CharacterBuildPresets.ini") 4
 
 ; Character Preset Menu support
 if eval GetPluginVersion "Race Preset Menu" > 0
-	Goo1.AuxVarSetFlt "*CharPre_INI" 1 4
+	Goo1.AuxVarSetFlt "*CharPre_INI" 1 5
 else
 	SetOnMenuClickEventHandler ({int iMenuID, int iTileID, string_var sTileName} => SetUIStringAlt "RaceSexMenu\NOGLOW_BRANCH\RSM_Background\RSM_back_button\string" (Sv_ToUpper (GetStringSetting "sBack"))) 1 "RaceSexMenu\NOGLOW_BRANCH\RSM_Background\RSM_next_button"
 endif
@@ -66,9 +72,11 @@ if Goo1.AuxVarGetFlt "*CharPre_INI" 2 == 1 || Goo1.AuxVarGetFlt "*CharPre_INI" 3
 endif
 
 ; Preselect traits
-if GetINIFloat "Preselect:bTraits" "Stentorious\CharacterBuildPresets.ini" == 1
+if eval GetINIFloat_Cached "Preselect:bTraits" "Stentorious\CharacterBuildPresets.ini"
 	SetOnMenuOpenEventHandler (CompileScript "CharacterBuildPresets\TraitMenu.gek") 1 1084
 endif
+
+CloseFileSO "Stentorious\CharacterBuildPresets.ini" 0
 
 ; SPECIAL book menu fix
 if eval IsModLoaded "TaleOfTwoWastelands.esm"

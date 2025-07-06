@@ -54,6 +54,23 @@ begin Function {}
 					iVerify = 0
 					PrintC "Malformed %z: Missing tagged skill(s)" sFilename
 				endif
+
+				; Verify SPECIAL points
+				if eval Goo1.AuxVarGetFlt "*CharPre_INI" 4
+					iTemp = #(aINI["Strength"]) + #(aINI["Perception"]) + #(aINI["Endurance"]) + #(aINI["Charisma"]) + #(aINI["Intelligence"]) + #(aINI["Agility"]) + #(aINI["Luck"]) - 7
+					if eval iTemp > (iLoop = Goo1.AuxVarGetFlt "*CharPre_Flt" 0)
+						iVerify = 0
+						PrintC "Invalid %z: Excess SPECIAL points (%g > %g)" sFilename iTemp iLoop
+					endif
+
+					; Verify trait points
+					aStat = Sv_Split (aINI["Traits"]) "|"
+					iTemp = Ar_Size aStat
+					if eval iTemp > (iLoop = GetGS iTraitMenuMaxNumTraits)
+						iVerify = 0
+						PrintC "Invalid %z: Excess trait points (%g > %g)" sFilename iTemp iLoop
+					endif
+				endif
 			endif
 
 			; Add preset option

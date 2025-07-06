@@ -37,23 +37,23 @@ begin Function {iButton}
 
 		; Preset/character name
 		PrintC "Loading Build Preset: %z" sPreset
-		sName = GetINIString "Preset:Name" (sINI)
+		sName = GetINIString_Cached "Preset:Name" (sINI)
 		Goo1.AuxVarSetStr "CharPre_Cache" (sName) 0
 		sMsgBox = Sv_Construct "^%z^%z: %z%r%r" sPreset (GetStringSetting "sName") (sName)
 
 		; SPECIAL
-		Goo1.AuxVarSetFlt "CharPre_Cache" (iStrength = GetINIFloat "Preset:Strength" (sINI)) 1
-		Goo1.AuxVarSetFlt "CharPre_Cache" (iPerception = GetINIFloat "Preset:Perception" (sINI)) 2
-		Goo1.AuxVarSetFlt "CharPre_Cache" (iEndurance = GetINIFloat "Preset:Endurance" (sINI)) 3
-		Goo1.AuxVarSetFlt "CharPre_Cache" (iCharisma = GetINIFloat "Preset:Charisma" (sINI)) 4
-		Goo1.AuxVarSetFlt "CharPre_Cache" (iIntelligence = GetINIFloat "Preset:Intelligence" (sINI)) 5
-		Goo1.AuxVarSetFlt "CharPre_Cache" (iAgility = GetINIFloat "Preset:Agility" (sINI)) 6
-		Goo1.AuxVarSetFlt "CharPre_Cache" (iLuck = GetINIFloat "Preset:Luck" (sINI)) 7
+		Goo1.AuxVarSetFlt "CharPre_Cache" (iStrength = GetINIFloat_Cached "Preset:Strength" (sINI)) 1
+		Goo1.AuxVarSetFlt "CharPre_Cache" (iPerception = GetINIFloat_Cached "Preset:Perception" (sINI)) 2
+		Goo1.AuxVarSetFlt "CharPre_Cache" (iEndurance = GetINIFloat_Cached "Preset:Endurance" (sINI)) 3
+		Goo1.AuxVarSetFlt "CharPre_Cache" (iCharisma = GetINIFloat_Cached "Preset:Charisma" (sINI)) 4
+		Goo1.AuxVarSetFlt "CharPre_Cache" (iIntelligence = GetINIFloat_Cached "Preset:Intelligence" (sINI)) 5
+		Goo1.AuxVarSetFlt "CharPre_Cache" (iAgility = GetINIFloat_Cached "Preset:Agility" (sINI)) 6
+		Goo1.AuxVarSetFlt "CharPre_Cache" (iLuck = GetINIFloat_Cached "Preset:Luck" (sINI)) 7
 		sMsgBox += Sv_Construct "%z%r%z: %g%r%z: %g%r%z: %g%r%z: %g%r%z: %g%r%z: %g%r%z: %g%r%r" (GetStringSetting "sStatsSpecial") (AVStringC 5 1) iStrength (AVStringC 6 1) iPerception (AVStringC 7 1) iEndurance (AVStringC 8 1) iCharisma (AVStringC 9 1) iIntelligence (AVStringC 10 1) iAgility (AVStringC 11 1) iLuck
 
 		; Tag skills
 		sMsgBox += "Tag Skills:"
-		aStat = Sv_Split (GetINIString "Preset:TagSkills" (sINI)) "|"
+		aStat = Sv_Split (GetINIString_Cached "Preset:TagSkills" (sINI)) "|"
 		iLoop = 0
 		while iLoop < 3
 			Goo1.AuxVarSetStr "CharPre_Cache" (aStat[iLoop]) (iLoop + 8)
@@ -66,8 +66,8 @@ begin Function {iButton}
 			Goo1.AuxVarErase "CharPre_Cache" 11
 		loop
 		sMsgBox += Sv_Construct "%r%rTraits:"
-		if eval (GetINIString "Preset:Traits" (sINI) != "0")
-			aStat = Sv_Split (GetINIString "Preset:Traits" (sINI)) "|"
+		if eval (GetINIString_Cached "Preset:Traits" (sINI) != "0")
+			aStat = Sv_Split (GetINIString_Cached "Preset:Traits" (sINI)) "|"
 			if aStat
 				iLoop = 11
 				foreach aForE <- aStat
@@ -90,6 +90,8 @@ begin Function {iButton}
 		else
 			sMsgBox += Sv_Construct "%r> %z" (GetStringSetting "sNone")
 		endif
+
+		CloseFileSO (sINI) 0
 
 		; Show preset message box
 		MessageBoxExAlt (CompileScript "CharacterBuildPresets\VerifySpecial.gek") "%z|%z|%z" sMsgBox (GetStringSetting "sLoad") (GetStringSetting "sCancel")
