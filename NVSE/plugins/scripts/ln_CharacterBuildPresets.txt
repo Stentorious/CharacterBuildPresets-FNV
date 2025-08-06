@@ -32,6 +32,7 @@ if GetPluginVersion "UI Organizer Plugin" < 230
 endif
 
 ; Load INI settings
+Goo1.AuxVarSetFlt "*_Tweaks:bFreeWildWasteland" (StewVal "bFreeWildWasteland:Tweaks")
 int iINI = 40
 if eval (StewVal "bCustomSpecialPoints:Tweaks") == 1
 	iINI = StewVal "iNumPointsToAllocate:SPECIAL Points"
@@ -40,6 +41,7 @@ elseif eval IsModLoaded "UF Hardercore.esp"
 elseif eval IsModLoaded "ROOG.esp" || IsModLoaded "ROOGNV.esp"
 	iINI = GetGlobalVariable (EditorIDToFormID "SpecialPoints")
 endif
+
 Goo1.AuxVarSetFlt "*CharPre_Flt" (iINI - 7) 0
 Goo1.AuxVarSetFlt "*CharPre_INI" (Clamp (GetINIFloat_Cached "Randomization:iMaxTraits" "Stentorious\CharacterBuildPresets.ini") 0 (GetGS iTraitMenuMaxNumTraits)) 0
 Goo1.AuxVarSetFlt "*CharPre_INI" (Clamp (GetINIFloat_Cached "Randomization:iMinTraits" "Stentorious\CharacterBuildPresets.ini") 0 (Goo1.AuxVarGetFlt "*CharPre_INI" 0)) 1

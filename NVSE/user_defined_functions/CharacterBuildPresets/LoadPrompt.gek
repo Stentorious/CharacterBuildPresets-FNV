@@ -66,6 +66,9 @@ begin Function {}
 					; Verify trait points
 					aStat = Sv_Split (aINI["Traits"]) "|"
 					iTemp = Ar_Size aStat
+					if eval Ar_Find "WildWasteland" aStat != Ar_BadNumericIndex && Goo1.AuxVarGetFlt "*_Tweaks:bFreeWildWasteland"
+						iTemp -= 1
+					endif
 					if eval iTemp > (iLoop = GetGS iTraitMenuMaxNumTraits)
 						iVerify = 0
 						PrintC "Invalid %z: Excess trait points (%g > %g)" sFilename iTemp iLoop

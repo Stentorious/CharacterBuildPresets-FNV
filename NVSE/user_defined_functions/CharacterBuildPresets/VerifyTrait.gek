@@ -2,6 +2,7 @@ int iButton
 
 int iCount
 int iAvailable
+array_var aTemp
 
 begin Function {iButton}
 
@@ -12,9 +13,15 @@ begin Function {iButton}
 
 	; Verify traits
 	; Calculate preset trait count
+	aTemp = ar_Construct "array"
 	while Goo1.AuxVarType "CharPre_Cache" (iCount + 11) == 4
+		Ar_Append aTemp (Goo1.AuxVarGetStr "CharPre_Cache" (iCount + 11))
 		iCount += 1
 	loop
+	if eval Ar_Find "WildWasteland" aTemp != Ar_BadNumericIndex && Goo1.AuxVarGetFlt "*_Tweaks:bFreeWildWasteland"
+		iCount -= 1
+	endif
+	aTemp = Ar_Null
 
 	; Preset trait count > available trait points
 	if eval iCount > (iAvailable = GetGS iTraitMenuMaxNumTraits)
