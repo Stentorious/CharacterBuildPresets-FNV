@@ -1,7 +1,5 @@
 <_y>
-	<copy src="sibling(LUM_ResetButton)" trait="_y" />
-	<add>
-		<copy src="sibling(LUM_ResetButton)" trait="height" />
-		<onlyif src="sibling(LUM_ResetButton)" trait="visible" />
-	</add>
+	<copy src="sibling(LUM_ResetButton)" trait="height" />
+	<onlyif src="sibling(LUM_ResetButton)" trait="visible" />
+	<add src="sibling(LUM_ResetButton)" trait="_y" />
 </_y>

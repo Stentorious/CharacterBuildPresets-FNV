@@ -1,9 +1,6 @@
 <_y>
-	<copy> 0 </copy>
-	<add>
-		<copy src="sibling(LUM_RandomButton)" trait="height" />
-		<onlyif src="sibling(LUM_RandomButton)" trait="visible" />
-	</add>
+	<copy src="sibling(LUM_RandomButton)" trait="height" />
+	<onlyif src="sibling(LUM_RandomButton)" trait="visible" />
 	<add>
 		<copy src="sibling(LUM_PresetButton)" trait="height" />
 		<onlyif src="sibling(LUM_PresetButton)" trait="visible" />
