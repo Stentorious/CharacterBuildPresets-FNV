@@ -36,6 +36,8 @@ Goo1.AuxVarSetFlt "*_Tweaks:bFreeWildWasteland" (StewVal "bFreeWildWasteland:Twe
 int iINI = 40
 if eval (StewVal "bCustomSpecialPoints:Tweaks") == 1
 	iINI = StewVal "iNumPointsToAllocate:SPECIAL Points"
+elseif eval IsModLoaded "NS Hardercore.esp"
+	iINI = GetGlobalVariable (EditorIDToFormID "NSHardercoreSpecialPoints")
 elseif eval IsModLoaded "UF Hardercore.esp"
 	iINI = GetGlobalVariable (EditorIDToFormID "UFHardercoreSpecialPoints")
 elseif eval IsModLoaded "ROOG.esp" || IsModLoaded "ROOGNV.esp"
